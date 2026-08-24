@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Créer un compte - Proctectuhq AI</title>
+    <title>Chat - Proctectuhq AI</title>
 
     <style>
         * {
@@ -14,368 +14,807 @@
         }
 
         body {
-            min-height: 100vh;
+            height: 100vh;
             background: #000;
             color: white;
             font-family: Arial, Helvetica, sans-serif;
+            overflow: hidden;
+        }
+
+        /* =========================
+           APPLICATION
+           ========================= */
+
+        .app {
+            display: flex;
+            height: 100vh;
+        }
+
+
+        /* =========================
+           SIDEBAR
+           ========================= */
+
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+
+            background: #0a0a0a;
+            border-right: 1px solid #222;
 
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column;
 
-            padding: 20px;
+            padding: 15px;
         }
 
-        .register-container {
-            width: 100%;
-            max-width: 420px;
-        }
-
-        .logo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .logo-icon {
-            width: 70px;
-            height: 70px;
-
-            margin: 0 auto 15px;
-
+        .sidebar-header {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
 
-            background: #111;
-            border: 1px solid #333;
-            border-radius: 20px;
-
-            font-size: 32px;
+            margin-bottom: 20px;
         }
 
-        .logo h1 {
-            font-size: 25px;
-            margin-bottom: 8px;
-        }
-
-        .logo p {
-            color: #777;
-            font-size: 14px;
-        }
-
-        .register-box {
-            background: #0d0d0d;
-            border: 1px solid #292929;
-            border-radius: 18px;
-
-            padding: 30px;
-
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-        }
-
-        .register-box h2 {
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
-
-        .subtitle {
-            color: #777;
-            font-size: 14px;
-            margin-bottom: 25px;
-        }
-
-        .form-group {
-            margin-bottom: 17px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-
-            color: #ccc;
-            font-size: 14px;
-        }
-
-        .form-group input {
-            width: 100%;
-
-            padding: 14px;
-
-            background: #050505;
-            border: 1px solid #333;
-            border-radius: 10px;
-
-            color: white;
-            outline: none;
-
-            font-size: 15px;
-
-            transition: 0.2s;
-        }
-
-        .form-group input:focus {
-            border-color: #666;
-
-            box-shadow:
-                0 0 0 3px rgba(255, 255, 255, 0.04);
-        }
-
-        .password-info {
-            margin-top: 7px;
-
-            color: #555;
-            font-size: 11px;
-        }
-
-        .register-button {
-            width: 100%;
-
-            padding: 14px;
-
-            margin-top: 5px;
-
-            border: none;
-            border-radius: 10px;
-
-            background: white;
-            color: black;
-
-            font-size: 15px;
+        .brand {
+            font-size: 17px;
             font-weight: bold;
+        }
+
+        .new-chat {
+            width: 38px;
+            height: 38px;
+
+            border: 1px solid #333;
+            border-radius: 10px;
+
+            background: #151515;
+            color: white;
+
+            font-size: 20px;
 
             cursor: pointer;
 
             transition: 0.2s;
         }
 
-        .register-button:hover {
-            background: #ddd;
-            transform: translateY(-1px);
+        .new-chat:hover {
+            background: #222;
         }
 
-        .register-button:active {
-            transform: scale(0.98);
+        .sidebar-title {
+            color: #666;
+            font-size: 11px;
+            text-transform: uppercase;
+
+            margin: 10px 8px;
+        }
+
+        .chat-list {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .chat-item {
+            padding: 11px;
+
+            border-radius: 9px;
+
+            color: #aaa;
+            font-size: 13px;
+
+            cursor: pointer;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            transition: 0.2s;
+        }
+
+        .chat-item:hover {
+            background: #161616;
+            color: white;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .sidebar-button {
+            padding: 11px;
+
+            border: none;
+            border-radius: 9px;
+
+            background: transparent;
+            color: #888;
+
+            text-align: left;
+
+            cursor: pointer;
+        }
+
+        .sidebar-button:hover {
+            background: #161616;
+            color: white;
+        }
+
+
+        /* =========================
+           CHAT
+           ========================= */
+
+        .chat-container {
+            flex: 1;
+
+            height: 100vh;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        /* =========================
+           HEADER
+           ========================= */
+
+        .chat-header {
+            height: 65px;
+
+            display: flex;
+            align-items: center;
+
+            padding: 0 25px;
+
+            border-bottom: 1px solid #222;
+
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .model-name {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .status {
+            margin-left: 12px;
+
+            color: #777;
+            font-size: 12px;
+        }
+
+
+        /* =========================
+           MESSAGES
+           ========================= */
+
+        .messages {
+            flex: 1;
+
+            overflow-y: auto;
+
+            padding: 30px 20px 150px;
+        }
+
+        .messages::-webkit-scrollbar {
+            width: 7px;
+        }
+
+        .messages::-webkit-scrollbar-track {
+            background: #000;
+        }
+
+        .messages::-webkit-scrollbar-thumb {
+            background: #292929;
+            border-radius: 10px;
+        }
+
+        .welcome {
+            max-width: 700px;
+
+            margin: 100px auto 0;
+
+            text-align: center;
+        }
+
+        .welcome-icon {
+            font-size: 50px;
+
+            margin-bottom: 20px;
+        }
+
+        .welcome h1 {
+            font-size: 32px;
+
+            margin-bottom: 12px;
+        }
+
+        .welcome p {
+            color: #777;
+
+            line-height: 1.6;
         }
 
         .message {
-            display: none;
+            max-width: 850px;
 
-            margin-top: 15px;
-            padding: 12px;
+            margin: 0 auto 25px;
+
+            display: flex;
+
+            gap: 15px;
+
+            animation: messageIn 0.25s ease;
+        }
+
+        .avatar {
+            width: 35px;
+            height: 35px;
+
+            min-width: 35px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
             border-radius: 10px;
 
             background: #171717;
+
+            border: 1px solid #292929;
+        }
+
+        .message-content {
+            flex: 1;
+
+            padding-top: 7px;
+
+            line-height: 1.6;
+
+            color: #ddd;
+
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .message.user .message-content {
+            color: white;
+        }
+
+        @keyframes messageIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+
+        /* =========================
+           INPUT
+           ========================= */
+
+        .input-area {
+            position: fixed;
+
+            bottom: 0;
+            left: 260px;
+            right: 0;
+
+            padding: 20px 25px 25px;
+
+            background:
+                linear-gradient(
+                    transparent,
+                    #000 35%
+                );
+        }
+
+        .input-wrapper {
+            max-width: 850px;
+
+            margin: auto;
+
+            display: flex;
+            align-items: flex-end;
+
+            padding: 7px;
+
+            background: #111;
+
             border: 1px solid #333;
 
-            color: #aaa;
-            font-size: 13px;
-            text-align: center;
+            border-radius: 17px;
+
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+
+            transition: 0.2s;
         }
 
-        .login {
-            text-align: center;
-
-            margin-top: 22px;
-
-            color: #777;
-            font-size: 14px;
+        .input-wrapper:focus-within {
+            border-color: #555;
         }
 
-        .login a {
+        #messageInput {
+            flex: 1;
+
+            min-height: 45px;
+            max-height: 180px;
+
+            padding: 13px;
+
+            resize: none;
+
+            border: none;
+            outline: none;
+
+            background: transparent;
+
             color: white;
-            text-decoration: none;
+
+            font-family: inherit;
+            font-size: 15px;
+
+            line-height: 1.5;
         }
 
-        .login a:hover {
-            text-decoration: underline;
-        }
-
-        .back {
-            display: block;
-
-            margin-top: 25px;
-
-            text-align: center;
-
+        #messageInput::placeholder {
             color: #666;
-            text-decoration: none;
-
-            font-size: 13px;
         }
 
-        .back:hover {
-            color: white;
+        #sendButton {
+            width: 45px;
+            height: 45px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background: white;
+            color: black;
+
+            font-size: 19px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        #sendButton:hover {
+            background: #ddd;
+        }
+
+        #sendButton:active {
+            transform: scale(0.94);
+        }
+
+        .input-info {
+            max-width: 850px;
+
+            margin: 8px auto 0;
+
+            text-align: center;
+
+            color: #444;
+
+            font-size: 11px;
+        }
+
+
+        /* =========================
+           MOBILE
+           ========================= */
+
+        .mobile-menu {
+            display: none;
+        }
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+
+                margin-right: 12px;
+
+                width: 35px;
+                height: 35px;
+
+                background: transparent;
+                border: none;
+
+                color: white;
+
+                font-size: 20px;
+            }
+
+            .chat-header {
+                padding: 0 15px;
+            }
+
+            .input-area {
+                left: 0;
+
+                padding: 12px 12px 18px;
+            }
+
+            .messages {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .welcome {
+                margin-top: 70px;
+            }
+
+            .welcome h1 {
+                font-size: 25px;
+            }
+
+            .message {
+                gap: 10px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <main class="register-container">
+    <div class="app">
 
-        <div class="logo">
+        <!-- =========================
+             SIDEBAR
+             ========================= -->
 
-            <div class="logo-icon">
-                🤖
+        <aside class="sidebar">
+
+            <div class="sidebar-header">
+
+                <div class="brand">
+                    🤖 Proctectuhq AI
+                </div>
+
+                <button
+                    class="new-chat"
+                    onclick="newChat()"
+                    title="Nouvelle conversation"
+                >
+                    +
+                </button>
+
             </div>
 
-            <h1>Proctectuhq AI</h1>
 
-            <p>Crée ton compte gratuitement</p>
-
-        </div>
-
-
-        <section class="register-box">
-
-            <h2>Créer un compte</h2>
-
-            <p class="subtitle">
-                Rejoins Proctectuhq AI et commence à discuter avec ton IA.
-            </p>
+            <div class="sidebar-title">
+                Conversations
+            </div>
 
 
-            <form id="registerForm">
-
-                <div class="form-group">
-
-                    <label for="username">
-                        Nom d'utilisateur
-                    </label>
-
-                    <input
-                        type="text"
-                        id="username"
-                        placeholder="Ton pseudo"
-                        minlength="3"
-                        maxlength="30"
-                        required
-                    >
-
-                </div>
+            <div
+                id="chatList"
+                class="chat-list"
+            >
+            </div>
 
 
-                <div class="form-group">
+            <div class="sidebar-bottom">
 
-                    <label for="email">
-                        Adresse e-mail
-                    </label>
+                <button
+                    class="sidebar-button"
+                    onclick="window.location.href='settings.html'"
+                >
+                    ⚙️ Paramètres
+                </button>
 
-                    <input
-                        type="email"
-                        id="email"
-                        placeholder="exemple@email.com"
-                        required
-                    >
+                <button
+                    class="sidebar-button"
+                    onclick="window.location.href='../index.html'"
+                >
+                    🏠 Accueil
+                </button>
 
-                </div>
+            </div>
+
+        </aside>
 
 
-                <div class="form-group">
+        <!-- =========================
+             CHAT
+             ========================= -->
 
-                    <label for="password">
-                        Mot de passe
-                    </label>
+        <main class="chat-container">
 
-                    <input
-                        type="password"
-                        id="password"
-                        placeholder="Ton mot de passe"
-                        minlength="8"
-                        required
-                    >
+            <header class="chat-header">
 
-                    <p class="password-info">
-                        Minimum 8 caractères.
+                <button
+                    class="mobile-menu"
+                    onclick="alert('Menu mobile bientôt disponible')"
+                >
+                    ☰
+                </button>
+
+                <span class="model-name">
+                    🤖 Proctectuhq AI
+                </span>
+
+                <span class="status">
+                    ● Prêt
+                </span>
+
+            </header>
+
+
+            <!-- Messages -->
+
+            <section
+                id="messages"
+                class="messages"
+            >
+
+                <div
+                    id="welcome"
+                    class="welcome"
+                >
+
+                    <div class="welcome-icon">
+                        🤖
+                    </div>
+
+                    <h1>
+                        Comment puis-je t'aider ?
+                    </h1>
+
+                    <p>
+                        Pose-moi une question, demande-moi du code,
+                        une explication ou une idée de projet.
                     </p>
 
                 </div>
 
+            </section>
 
-                <div class="form-group">
 
-                    <label for="confirmPassword">
-                        Confirmer le mot de passe
-                    </label>
+            <!-- Zone de saisie -->
 
-                    <input
-                        type="password"
-                        id="confirmPassword"
-                        placeholder="Retape ton mot de passe"
-                        minlength="8"
-                        required
+            <div class="input-area">
+
+                <div class="input-wrapper">
+
+                    <textarea
+                        id="messageInput"
+                        placeholder="Écris ton message..."
+                        rows="1"
+                    ></textarea>
+
+                    <button
+                        id="sendButton"
+                        onclick="sendMessage()"
+                        title="Envoyer"
                     >
+                        ➤
+                    </button>
 
                 </div>
 
+                <div class="input-info">
+                    Proctectuhq AI peut parfois faire des erreurs.
+                </div>
 
-                <button
-                    type="submit"
-                    class="register-button"
-                >
-                    🚀 Créer mon compte
-                </button>
+            </div>
 
-            </form>
+        </main>
 
-
-            <div
-                id="message"
-                class="message"
-            ></div>
-
-
-            <p class="login">
-                Tu as déjà un compte ?
-                <a href="login.html">
-                    Se connecter
-                </a>
-            </p>
-
-        </section>
-
-
-        <a
-            class="back"
-            href="../index.html"
-        >
-            ← Retour à l'accueil
-        </a>
-
-    </main>
+    </div>
 
 
     <script>
-        const form = document.getElementById("registerForm");
-        const message = document.getElementById("message");
 
-        form.addEventListener("submit", function(event) {
+        const messagesContainer =
+            document.getElementById("messages");
 
-            event.preventDefault();
+        const messageInput =
+            document.getElementById("messageInput");
 
-            const password =
-                document.getElementById("password").value;
+        const welcome =
+            document.getElementById("welcome");
 
-            const confirmPassword =
-                document.getElementById("confirmPassword").value;
+        const chatList =
+            document.getElementById("chatList");
 
-            if (password !== confirmPassword) {
 
-                message.textContent =
-                    "❌ Les mots de passe ne correspondent pas.";
+        /* =========================
+           ENVOYER UN MESSAGE
+           ========================= */
 
-                message.style.display = "block";
+        function sendMessage() {
 
+            const text =
+                messageInput.value.trim();
+
+            if (text === "") {
                 return;
             }
 
-            message.textContent =
-                "✅ Formulaire valide ! Le système de compte sera activé avec le backend.";
+            welcome.style.display = "none";
 
-            message.style.display = "block";
+            addMessage(
+                text,
+                "user"
+            );
 
-        });
+            messageInput.value = "";
+
+            messageInput.style.height = "auto";
+
+            /*
+             * Pour l'instant, ceci est une réponse
+             * temporaire.
+             *
+             * Plus tard, cette partie appellera
+             * ton backend Python.
+             */
+
+            setTimeout(function () {
+
+                addMessage(
+                    "🤖 Je suis actuellement en mode démonstration. La vraie IA sera connectée au backend Python prochainement.",
+                    "ai"
+                );
+
+            }, 700);
+        }
+
+
+        /* =========================
+           AJOUTER UN MESSAGE
+           ========================= */
+
+        function addMessage(text, type) {
+
+            const message =
+                document.createElement("div");
+
+            message.className =
+                "message " + type;
+
+
+            const avatar =
+                document.createElement("div");
+
+            avatar.className = "avatar";
+
+            avatar.textContent =
+                type === "user"
+                    ? "👤"
+                    : "🤖";
+
+
+            const content =
+                document.createElement("div");
+
+            content.className =
+                "message-content";
+
+            content.textContent = text;
+
+
+            message.appendChild(avatar);
+
+            message.appendChild(content);
+
+            messagesContainer.appendChild(message);
+
+
+            messagesContainer.scrollTo({
+                top: messagesContainer.scrollHeight,
+                behavior: "smooth"
+            });
+        }
+
+
+        /* =========================
+           NOUVELLE CONVERSATION
+           ========================= */
+
+        function newChat() {
+
+            const oldMessages =
+                document.querySelectorAll(
+                    ".message"
+                );
+
+            oldMessages.forEach(function(message) {
+                message.remove();
+            });
+
+            welcome.style.display = "block";
+
+            messageInput.value = "";
+
+            messageInput.focus();
+        }
+
+
+        /* =========================
+           ENTRÉE = ENVOYER
+           ========================= */
+
+        messageInput.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (
+                    event.key === "Enter" &&
+                    !event.shiftKey
+                ) {
+
+                    event.preventDefault();
+
+                    sendMessage();
+                }
+
+            }
+        );
+
+
+        /* =========================
+           AUTO AGRANDISSEMENT
+           ========================= */
+
+        messageInput.addEventListener(
+            "input",
+            function() {
+
+                this.style.height = "auto";
+
+                this.style.height =
+                    Math.min(
+                        this.scrollHeight,
+                        180
+                    ) + "px";
+
+            }
+        );
+
+
+        /* =========================
+           QUESTION DEPUIS INDEX
+           ========================= */
+
+        const firstQuestion =
+            localStorage.getItem(
+                "firstQuestion"
+            );
+
+        if (firstQuestion) {
+
+            localStorage.removeItem(
+                "firstQuestion"
+            );
+
+            setTimeout(function() {
+
+                messageInput.value =
+                    firstQuestion;
+
+                sendMessage();
+
+            }, 300);
+        }
+
     </script>
 
 </body>
