@@ -1,1 +1,408 @@
+/* =========================
+   PROCTECTUHQ AI
+   ========================= */
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 50% 25%, #171717 0%, #080808 45%, #000000 100%);
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
+}
+
+
+/* =========================
+   NAVBAR
+   ========================= */
+
+.navbar {
+    width: 100%;
+    height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 6%;
+
+    background: rgba(0, 0, 0, 0.65);
+    border-bottom: 1px solid #222;
+
+    backdrop-filter: blur(15px);
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+
+    letter-spacing: 0.5px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.logo:hover {
+    transform: scale(1.03);
+}
+
+.navbar nav {
+    display: flex;
+    gap: 25px;
+}
+
+.navbar nav a {
+    color: #aaa;
+    text-decoration: none;
+
+    font-size: 14px;
+
+    transition: 0.25s;
+}
+
+.navbar nav a:hover {
+    color: #fff;
+}
+
+
+/* =========================
+   HERO
+   ========================= */
+
+.hero {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 110px 20px 80px;
+}
+
+.hero-content {
+    width: 100%;
+    max-width: 900px;
+
+    text-align: center;
+}
+
+
+/* =========================
+   AI ICON
+   ========================= */
+
+.ai-icon {
+    width: 75px;
+    height: 75px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 25px;
+
+    border-radius: 22px;
+
+    background: linear-gradient(145deg, #202020, #0c0c0c);
+
+    border: 1px solid #333;
+
+    box-shadow:
+        0 0 40px rgba(255, 255, 255, 0.05),
+        inset 0 0 20px rgba(255, 255, 255, 0.03);
+
+    font-size: 34px;
+
+    transition: 0.3s;
+}
+
+.ai-icon:hover {
+    transform: translateY(-5px) rotate(2deg);
+
+    box-shadow:
+        0 0 50px rgba(255, 255, 255, 0.09);
+}
+
+
+/* =========================
+   TITRES
+   ========================= */
+
+.hero h1 {
+    font-size: 52px;
+
+    margin-bottom: 8px;
+
+    font-weight: 700;
+
+    letter-spacing: -1.5px;
+}
+
+.hero h2 {
+    font-size: 30px;
+
+    margin-bottom: 20px;
+
+    color: #ddd;
+
+    font-weight: 600;
+}
+
+.hero p {
+    max-width: 650px;
+
+    margin: 0 auto 35px;
+
+    color: #999;
+
+    font-size: 17px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================
+   SEARCH BOX
+   ========================= */
+
+.search-box {
+    width: 100%;
+    max-width: 750px;
+
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+
+    padding: 7px;
+
+    background: #111;
+
+    border: 1px solid #333;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 10px 40px rgba(0, 0, 0, 0.5);
+
+    transition: 0.3s;
+}
+
+.search-box:focus-within {
+    border-color: #555;
+
+    box-shadow:
+        0 0 0 3px rgba(255, 255, 255, 0.04),
+        0 15px 50px rgba(0, 0, 0, 0.6);
+}
+
+.search-box input {
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 17px 18px;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 16px;
+}
+
+.search-box input::placeholder {
+    color: #666;
+}
+
+.search-box button {
+    width: 50px;
+    height: 50px;
+
+    border: none;
+
+    border-radius: 13px;
+
+    background: #ffffff;
+
+    color: #000;
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    transition: 0.25s;
+}
+
+.search-box button:hover {
+    transform: scale(1.05);
+
+    background: #ddd;
+}
+
+.search-box button:active {
+    transform: scale(0.95);
+}
+
+
+/* =========================
+   QUICK ACTIONS
+   ========================= */
+
+.quick-actions {
+    margin-top: 22px;
+
+    display: flex;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+}
+
+.quick-actions button {
+    padding: 11px 16px;
+
+    border-radius: 12px;
+
+    border: 1px solid #292929;
+
+    background: #0e0e0e;
+
+    color: #aaa;
+
+    font-size: 13px;
+
+    cursor: pointer;
+
+    transition: 0.25s;
+}
+
+.quick-actions button:hover {
+    color: white;
+
+    background: #171717;
+
+    border-color: #444;
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================
+   FOOTER
+   ========================= */
+
+footer {
+    position: fixed;
+
+    bottom: 18px;
+
+    left: 0;
+
+    width: 100%;
+
+    text-align: center;
+
+    pointer-events: none;
+}
+
+footer p {
+    color: #555;
+
+    font-size: 12px;
+}
+
+
+/* =========================
+   ANIMATIONS
+   ========================= */
+
+.hero-content {
+    animation: fadeIn 0.8s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 700px) {
+
+    .navbar {
+        padding: 0 20px;
+    }
+
+    .navbar nav {
+        gap: 12px;
+    }
+
+    .navbar nav a {
+        font-size: 12px;
+    }
+
+    .hero {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .hero h1 {
+        font-size: 38px;
+    }
+
+    .hero h2 {
+        font-size: 23px;
+    }
+
+    .hero p {
+        font-size: 15px;
+    }
+
+    .search-box {
+        border-radius: 15px;
+    }
+
+    .search-box input {
+        font-size: 14px;
+    }
+
+    .quick-actions {
+        flex-direction: column;
+    }
+
+    .quick-actions button {
+        width: 100%;
+    }
+}
