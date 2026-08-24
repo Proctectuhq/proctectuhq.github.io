@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>VS-Bump — Mes votes</title>
+    <meta name="description" content="Consulte tes votes sur VS-Bump.">
+
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/cards.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+
+<body>
+
+    <div id="navbar"></div>
+
+    <main>
+
+        <section class="page-header">
+
+            <div class="page-header-content">
+
+                <span class="section-badge">❤️ MES VOTES</span>
+
+                <h1>
+                    Ton historique de
+                    <span>votes</span>
+                </h1>
+
+                <p>
+                    Consulte les serveurs que tu as soutenus sur VS-Bump.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <section class="votes-page">
+
+            <!-- STATS -->
+            <section class="votes-stats">
+
+                <div class="stat-card">
+
+                    <span class="stat-icon">❤️</span>
+
+                    <strong id="total-votes">
+                        0
+                    </strong>
+
+                    <p>
+                        Votes effectués
+                    </p>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span class="stat-icon">🔥</span>
+
+                    <strong id="votes-this-month">
+                        0
+                    </strong>
+
+                    <p>
+                        Ce mois-ci
+                    </p>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span class="stat-icon">🌐</span>
+
+                    <strong id="servers-voted">
+                        0
+                    </strong>
+
+                    <p>
+                        Serveurs soutenus
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- VOTES HISTORY -->
+            <section class="dashboard-servers">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <span class="section-badge">
+                            📋 HISTORIQUE
+                        </span>
+
+                        <h2>
+                            Mes derniers votes
+                        </h2>
+
+                        <p id="votes-count">
+                            Chargement...
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="votes-container"
+                    class="server-grid"
+                >
+
+                    <div class="loading">
+
+                        <span>⏳</span>
+
+                        <p>
+                            Chargement de tes votes...
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PAGINATION -->
+                <div
+                    id="pagination"
+                    class="pagination"
+                ></div>
+
+            </section>
+
+
+            <!-- EMPTY -->
+            <section
+                id="empty-votes"
+                class="no-results"
+                style="display: none;"
+            >
+
+                <div class="no-results-content">
+
+                    <span>❤️</span>
+
+                    <h2>
+                        Aucun vote pour le moment
+                    </h2>
+
+                    <p>
+                        Explore les serveurs et vote pour tes communautés préférées.
+                    </p>
+
+                    <a
+                        href="servers.html"
+                        class="btn btn-primary"
+                    >
+                        🔎 Explorer les serveurs
+                    </a>
+
+                </div>
+
+            </section>
+
+
+            <!-- INFO -->
+            <section class="cta">
+
+                <div class="cta-content">
+
+                    <span>💡</span>
+
+                    <h2>
+                        Soutiens tes serveurs préférés
+                    </h2>
+
+                    <p>
+                        Ton vote aide les serveurs à monter dans le classement
+                        et à attirer de nouveaux membres.
+                    </p>
+
+                    <a
+                        href="servers.html"
+                        class="btn btn-primary"
+                    >
+                        🚀 Découvrir les serveurs
+                    </a>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+
+    <div id="footer"></div>
+
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/navbar.js"></script>
+    <script src="../js/votes.js"></script>
+    <script src="../js/notifications.js"></script>
+
+</body>
+</html>
