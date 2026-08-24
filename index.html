@@ -3,80 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proctectuhq</title>
 
-    <style>
-        body {
-            margin: 0;
-            background: #000;
-            color: white;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+    <title>Proctectuhq AI</title>
 
-        .container {
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 70px;
-            margin-bottom: 30px;
-        }
-
-        input {
-            width: 500px;
-            max-width: 80vw;
-            padding: 15px 20px;
-            border-radius: 30px;
-            border: 1px solid #555;
-            background: #111;
-            color: white;
-            font-size: 18px;
-            outline: none;
-        }
-
-        button {
-            margin-top: 20px;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            background: #222;
-            color: white;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #333;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <div class="container">
-        <h1>🔍 Google</h1>
+    <!-- Barre de navigation -->
+    <header class="navbar">
 
-        <input id="search" type="text" placeholder="Rechercher...">
+        <div class="logo">
+            🤖 Proctectuhq AI
+        </div>
 
-        <br>
+        <nav>
+            <a href="index.html">Accueil</a>
+            <a href="pages/about.html">À propos</a>
+            <a href="pages/login.html">Connexion</a>
+        </nav>
 
-        <button onclick="search()">Recherche Google</button>
-    </div>
+    </header>
 
-    <script>
-        function search() {
-            const query = document.getElementById("search").value;
 
-            if (query.trim() !== "") {
-                window.location.href =
-                    "https://www.google.com/search?q=" +
-                    encodeURIComponent(query);
-            }
-        }
-    </script>
+    <!-- Contenu principal -->
+    <main class="hero">
+
+        <div class="hero-content">
+
+            <div class="ai-icon">
+                🤖
+            </div>
+
+            <h1>
+                Bonjour 👋
+            </h1>
+
+            <h2>
+                Je suis Proctectuhq AI
+            </h2>
+
+            <p>
+                Une intelligence artificielle créée pour répondre
+                à tes questions, t'aider à coder et discuter avec toi.
+            </p>
+
+
+            <!-- Barre de recherche -->
+            <div class="search-box">
+
+                <input
+                    id="question"
+                    type="text"
+                    placeholder="Pose-moi une question..."
+                    autocomplete="off"
+                >
+
+                <button onclick="startChat()">
+                    ➤
+                </button>
+
+            </div>
+
+
+            <!-- Boutons rapides -->
+            <div class="quick-actions">
+
+                <button onclick="ask('Aide-moi à coder en Python')">
+                    🐍 Coder en Python
+                </button>
+
+                <button onclick="ask('Explique-moi quelque chose simplement')">
+                    💡 M'expliquer quelque chose
+                </button>
+
+                <button onclick="ask('Donne-moi une idée de projet')">
+                    🚀 Idée de projet
+                </button>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- Pied de page -->
+    <footer>
+
+        <p>
+            🖤 Proctectuhq AI • Projet personnel
+        </p>
+
+    </footer>
+
+
+    <script src="script.js"></script>
 
 </body>
 </html>
