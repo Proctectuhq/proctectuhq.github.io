@@ -1,0 +1,101 @@
+@media (max-width: 1200px) {
+    .container,
+    .navbar-container,
+    .footer-container {
+        width: 94%;
+    }
+}
+
+@media (max-width: 1000px) {
+    .server-content,
+    .dashboard-content {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-grid,
+    .admin-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 800px) {
+    .navbar-links {
+        display: none;
+    }
+
+    .navbar-toggle {
+        display: block;
+    }
+
+    .server-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .server-actions {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .page {
+        padding: 25px 0;
+    }
+
+    .dashboard,
+    .admin,
+    .server-page {
+        padding: 25px 0;
+    }
+
+    .dashboard-grid,
+    .admin-grid,
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-header,
+    .admin-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .server-name {
+        font-size: 23px;
+    }
+
+    .server-actions,
+    .form-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .server-action,
+    .form-button {
+        width: 100%;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: 12px;
+    }
+}
+
+@media (max-width: 400px) {
+    .navbar-container {
+        width: 95%;
+    }
+
+    .navbar-login {
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+
+    .logo-text {
+        font-size: 17px;
+    }
+
+    .server-card {
+        padding: 14px;
+    }
+}
