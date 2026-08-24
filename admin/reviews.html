@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>VS-Bump — Administration des avis</title>
+
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/forms.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+
+<body>
+
+    <div id="navbar"></div>
+
+    <main>
+
+        <section class="page-header">
+
+            <div class="page-header-content">
+
+                <span class="section-badge">
+                    🛡️ ADMINISTRATION
+                </span>
+
+                <h1>
+                    Modération des
+                    <span>avis</span>
+                </h1>
+
+                <p>
+                    Consulte et modère les avis publiés sur VS-Bump.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- STATISTIQUES -->
+
+        <section class="admin-stats">
+
+            <div class="admin-stat-card">
+                <span>⭐</span>
+                <strong id="total-reviews">0</strong>
+                <p>Total des avis</p>
+            </div>
+
+            <div class="admin-stat-card">
+                <span>⏳</span>
+                <strong id="pending-reviews">0</strong>
+                <p>En attente</p>
+            </div>
+
+            <div class="admin-stat-card">
+                <span>✅</span>
+                <strong id="approved-reviews">0</strong>
+                <p>Approuvés</p>
+            </div>
+
+            <div class="admin-stat-card">
+                <span>🚨</span>
+                <strong id="reported-reviews">0</strong>
+                <p>Signalés</p>
+            </div>
+
+        </section>
+
+
+        <!-- FILTRES -->
+
+        <section class="admin-filters">
+
+            <div class="form-group">
+
+                <label for="review-search">
+                    🔎 Rechercher
+                </label>
+
+                <input
+                    type="text"
+                    id="review-search"
+                    placeholder="Serveur, utilisateur ou contenu..."
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="review-status">
+                    📊 Statut
+                </label>
+
+                <select id="review-status">
+
+                    <option value="all">
+                        Tous
+                    </option>
+
+                    <option value="pending">
+                        ⏳ En attente
+                    </option>
+
+                    <option value="approved">
+                        ✅ Approuvés
+                    </option>
+
+                    <option value="reported">
+                        🚨 Signalés
+                    </option>
+
+                    <option value="deleted">
+                        🗑️ Supprimés
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="review-rating">
+                    ⭐ Note
+                </label>
+
+                <select id="review-rating">
+
+                    <option value="all">
+                        Toutes les notes
+                    </option>
+
+                    <option value="5">
+                        ⭐⭐⭐⭐⭐ 5
+                    </option>
+
+                    <option value="4">
+                        ⭐⭐⭐⭐ 4
+                    </option>
+
+                    <option value="3">
+                        ⭐⭐⭐ 3
+                    </option>
+
+                    <option value="2">
+                        ⭐⭐ 2
+                    </option>
+
+                    <option value="1">
+                        ⭐ 1
+                    </option>
+
+                </select>
+
+            </div>
+
+        </section>
+
+
+        <!-- TABLE -->
+
+        <section class="admin-table-section">
+
+            <div class="section-header">
+
+                <div>
+
+                    <span class="section-badge">
+                        ⭐ AVIS
+                    </span>
+
+                    <h2>
+                        Liste des avis
+                    </h2>
+
+                    <p id="reviews-count">
+                        Chargement...
+                    </p>
+
+                </div>
+
+                <button
+                    id="refresh-reviews"
+                    class="btn btn-secondary"
+                    type="button"
+                >
+                    🔄 Actualiser
+                </button>
+
+            </div>
+
+
+            <div class="admin-table-container">
+
+                <table class="admin-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Auteur</th>
+                            <th>Serveur</th>
+                            <th>Note</th>
+                            <th>Avis</th>
+                            <th>Statut</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="reviews-table">
+
+                        <tr>
+
+                            <td colspan="7">
+
+                                <div class="loading">
+                                    ⏳ Chargement des avis...
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- PAGINATION -->
+
+            <div
+                id="pagination"
+                class="pagination"
+            ></div>
+
+        </section>
+
+
+        <!-- MODAL -->
+
+        <div
+            id="review-modal"
+            class="modal"
+            style="display: none;"
+        >
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h2>
+                        ⭐ Détails de l'avis
+                    </h2>
+
+                    <button
+                        id="close-review-modal"
+                        class="modal-close"
+                        type="button"
+                    >
+                        ✕
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="review-details"
+                    class="modal-body"
+                >
+
+                    ⏳ Chargement...
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button
+                        id="delete-review"
+                        class="btn btn-danger"
+                        type="button"
+                    >
+                        🗑️ Supprimer
+                    </button>
+
+                    <button
+                        id="approve-review"
+                        class="btn btn-primary"
+                        type="button"
+                    >
+                        ✅ Approuver
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="admin-notification"
+            class="notification"
+            style="display: none;"
+        ></div>
+
+    </main>
+
+
+    <div id="footer"></div>
+
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/navbar.js"></script>
+    <script src="../js/admin.js"></script>
+    <script src="../js/notifications.js"></script>
+
+</body>
+</html>
