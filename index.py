@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>VS-Bump — Trouve ton serveur Discord</title>
+    <title>VS-Bump - Serveurs Discord</title>
+    <meta name="description" content="VS-Bump - Découvre, vote et référence les meilleurs serveurs Discord.">
 
-    <meta name="description" content="VS-Bump est une plateforme pour découvrir, rechercher et promouvoir des serveurs Discord.">
+    <link rel="icon" href="assets/images/favicon.png">
 
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/cards.css">
     <link rel="stylesheet" href="css/responsive.css">
 </head>
@@ -17,206 +19,301 @@
 <body>
 
     <!-- NAVBAR -->
-    <div id="navbar"></div>
+    <header class="navbar">
+        <div class="navbar-container">
+
+            <a href="index.html" class="navbar-logo">
+                <span class="logo-icon">🚀</span>
+                <span class="logo-text">VS-Bump</span>
+            </a>
+
+            <nav class="navbar-links">
+                <a href="index.html" class="navbar-link">🏠 Accueil</a>
+                <a href="pages/servers.html" class="navbar-link">🌐 Serveurs</a>
+                <a href="pages/search.html" class="navbar-link">🔎 Recherche</a>
+                <a href="pages/premium.html" class="navbar-link premium-link">👑 Premium</a>
+            </nav>
+
+            <div class="navbar-actions">
+                <a href="pages/dashboard.html"
+                   class="navbar-dashboard"
+                   id="dashboard-link">
+                    📊 Dashboard
+                </a>
+
+                <a href="pages/login.html"
+                   class="navbar-login"
+                   id="login-link">
+                    💜 Connexion Discord
+                </a>
+
+                <button class="navbar-toggle"
+                        id="navbar-toggle"
+                        type="button"
+                        aria-label="Ouvrir le menu">
+                    ☰
+                </button>
+            </div>
+
+        </div>
+    </header>
+
 
     <!-- HERO -->
     <main>
 
         <section class="hero">
+            <div class="container">
 
-            <div class="hero-content">
+                <div class="hero-content">
 
-                <span class="hero-badge">
-                    🚀 Découvrez de nouveaux serveurs Discord
-                </span>
+                    <span class="hero-badge">
+                        🚀 Bienvenue sur VS-Bump
+                    </span>
 
-                <h1>
-                    Trouve ton prochain
-                    <span>serveur Discord</span>
-                </h1>
+                    <h1>
+                        Trouve les meilleurs
+                        <span>serveurs Discord</span>
+                    </h1>
 
-                <p>
-                    Explore des milliers de serveurs Discord, découvre de nouvelles
-                    communautés et fais connaître ton propre serveur.
-                </p>
+                    <p>
+                        Découvre de nouvelles communautés, vote pour tes
+                        serveurs préférés et fais grandir ton serveur Discord.
+                    </p>
 
-                <div class="hero-buttons">
+                    <div class="hero-actions">
 
-                    <a href="pages/servers.html" class="btn btn-primary">
-                        🔎 Explorer les serveurs
+                        <a href="pages/servers.html" class="btn">
+                            🌐 Explorer les serveurs
+                        </a>
+
+                        <a href="pages/add-server.html" class="btn btn-secondary">
+                            ➕ Ajouter mon serveur
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- RECHERCHE -->
+        <section class="search-section">
+            <div class="container">
+
+                <form class="home-search"
+                      id="search-form"
+                      action="pages/search.html"
+                      method="get">
+
+                    <span class="search-icon">🔎</span>
+
+                    <input
+                        type="search"
+                        id="search-input"
+                        name="q"
+                        placeholder="Rechercher un serveur Discord..."
+                        autocomplete="off">
+
+                    <button type="submit" class="btn">
+                        Rechercher
+                    </button>
+
+                </form>
+
+            </div>
+        </section>
+
+
+        <!-- STATISTIQUES -->
+        <section class="stats-section">
+            <div class="container">
+
+                <div class="stats-grid">
+
+                    <div class="card stat-card">
+                        <span class="stat-icon">🌐</span>
+                        <strong id="stat-servers">0</strong>
+                        <span>Serveurs référencés</span>
+                    </div>
+
+                    <div class="card stat-card">
+                        <span class="stat-icon">👥</span>
+                        <strong id="stat-members">0</strong>
+                        <span>Membres</span>
+                    </div>
+
+                    <div class="card stat-card">
+                        <span class="stat-icon">⬆️</span>
+                        <strong id="stat-votes">0</strong>
+                        <span>Votes</span>
+                    </div>
+
+                    <div class="card stat-card">
+                        <span class="stat-icon">⭐</span>
+                        <strong id="stat-reviews">0</strong>
+                        <span>Avis</span>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- SERVEURS -->
+        <section class="servers-section">
+            <div class="container">
+
+                <div class="section-header">
+
+                    <div>
+                        <span class="section-badge">🔥 Populaires</span>
+
+                        <h2>
+                            Les serveurs du moment
+                        </h2>
+
+                        <p>
+                            Découvre les communautés les plus populaires
+                            sur VS-Bump.
+                        </p>
+                    </div>
+
+                    <a href="pages/servers.html" class="btn btn-secondary">
+                        Voir tous les serveurs →
                     </a>
 
-                    <a href="pages/add-server.html" class="btn btn-secondary">
+                </div>
+
+
+                <div class="servers-grid" id="servers-container">
+
+                    <article class="server-card">
+
+                        <div class="server-card-header">
+
+                            <img
+                                src="assets/images/default-server.png"
+                                alt="Serveur Discord"
+                                class="server-card-icon">
+
+                            <div class="server-card-info">
+
+                                <h3 class="server-card-name">
+                                    Serveur exemple
+                                </h3>
+
+                                <span class="server-card-category">
+                                    🎮 Gaming
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <p class="server-card-description">
+                            Découvre une nouvelle communauté Discord.
+                        </p>
+
+                        <div class="server-card-stats">
+                            <span>👥 0 membres</span>
+                            <span>⬆️ 0 votes</span>
+                        </div>
+
+                        <div class="server-card-footer">
+
+                            <span class="server-card-status">
+                                🟢 En ligne
+                            </span>
+
+                            <a href="pages/server.html"
+                               class="server-card-button">
+                                👀 Voir
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- CTA -->
+        <section class="cta-section">
+            <div class="container">
+
+                <div class="cta-card">
+
+                    <span>🚀</span>
+
+                    <h2>
+                        Ton serveur mérite d'être découvert
+                    </h2>
+
+                    <p>
+                        Ajoute gratuitement ton serveur Discord sur VS-Bump
+                        et commence à recevoir des votes.
+                    </p>
+
+                    <a href="pages/add-server.html" class="btn">
                         ➕ Ajouter mon serveur
                     </a>
 
                 </div>
 
             </div>
-
-        </section>
-
-
-        <!-- STATISTIQUES -->
-        <section class="stats">
-
-            <div class="stat-card">
-                <span class="stat-icon">🌐</span>
-                <strong id="server-count">0</strong>
-                <p>Serveurs référencés</p>
-            </div>
-
-            <div class="stat-card">
-                <span class="stat-icon">👥</span>
-                <strong id="member-count">0</strong>
-                <p>Membres</p>
-            </div>
-
-            <div class="stat-card">
-                <span class="stat-icon">❤️</span>
-                <strong id="vote-count">0</strong>
-                <p>Votes aujourd'hui</p>
-            </div>
-
-        </section>
-
-
-        <!-- SERVEURS POPULAIRES -->
-        <section class="popular-servers">
-
-            <div class="section-header">
-
-                <div>
-                    <span class="section-badge">🔥 POPULAIRE</span>
-
-                    <h2>
-                        Serveurs populaires
-                    </h2>
-
-                    <p>
-                        Les serveurs Discord les plus appréciés par la communauté.
-                    </p>
-                </div>
-
-                <a href="pages/servers.html" class="view-all">
-                    Voir tous les serveurs →
-                </a>
-
-            </div>
-
-            <div id="popular-servers-container" class="server-grid">
-
-                <!-- Les serveurs seront chargés automatiquement par JavaScript -->
-
-                <div class="loading">
-                    <span>⏳</span>
-                    Chargement des serveurs...
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- CATÉGORIES -->
-        <section class="categories">
-
-            <div class="section-header">
-
-                <div>
-                    <span class="section-badge">📂 CATÉGORIES</span>
-
-                    <h2>
-                        Trouve ta communauté
-                    </h2>
-
-                    <p>
-                        Explore les serveurs selon tes centres d'intérêt.
-                    </p>
-                </div>
-
-            </div>
-
-
-            <div class="category-grid">
-
-                <a href="pages/servers.html?category=gaming" class="category-card">
-                    <span>🎮</span>
-                    <h3>Gaming</h3>
-                    <p>Jeux vidéo et communautés gaming</p>
-                </a>
-
-                <a href="pages/servers.html?category=community" class="category-card">
-                    <span>💬</span>
-                    <h3>Communauté</h3>
-                    <p>Discute et rencontre de nouvelles personnes</p>
-                </a>
-
-                <a href="pages/servers.html?category=anime" class="category-card">
-                    <span>🎌</span>
-                    <h3>Anime</h3>
-                    <p>Mangas, anime et culture japonaise</p>
-                </a>
-
-                <a href="pages/servers.html?category=music" class="category-card">
-                    <span>🎵</span>
-                    <h3>Musique</h3>
-                    <p>Partage et découvre de la musique</p>
-                </a>
-
-                <a href="pages/servers.html?category=development" class="category-card">
-                    <span>💻</span>
-                    <h3>Développement</h3>
-                    <p>Programmation et technologie</p>
-                </a>
-
-                <a href="pages/servers.html?category=other" class="category-card">
-                    <span>✨</span>
-                    <h3>Autres</h3>
-                    <p>Découvre encore plus de communautés</p>
-                </a>
-
-            </div>
-
-        </section>
-
-
-        <!-- CTA -->
-        <section class="cta">
-
-            <div class="cta-content">
-
-                <span>🚀</span>
-
-                <h2>
-                    Tu as un serveur Discord ?
-                </h2>
-
-                <p>
-                    Ajoute-le gratuitement sur VS-Bump et fais-le découvrir
-                    à de nouveaux membres.
-                </p>
-
-                <a href="pages/add-server.html" class="btn btn-primary">
-                    ➕ Ajouter mon serveur
-                </a>
-
-            </div>
-
         </section>
 
     </main>
 
 
     <!-- FOOTER -->
-    <div id="footer"></div>
+    <footer class="footer">
+        <div class="footer-container">
+
+            <div class="footer-brand">
+
+                <a href="index.html" class="footer-logo">
+                    🚀 VS-Bump
+                </a>
+
+                <p>
+                    Le classement des meilleurs serveurs Discord.
+                </p>
+
+            </div>
+
+            <div class="footer-links">
+
+                <a href="pages/support.html">🛠️ Support</a>
+                <a href="pages/rules.html">📜 Règlement</a>
+                <a href="pages/privacy.html">🔒 Confidentialité</a>
+                <a href="pages/terms.html">📄 Conditions</a>
+
+            </div>
+
+            <div class="footer-bottom">
+                © 2026 VS-Bump. Tous droits réservés.
+            </div>
+
+        </div>
+    </footer>
 
 
-    <!-- JAVASCRIPT -->
+    <!-- SCRIPTS -->
     <script src="js/config.js"></script>
     <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
     <script src="js/navbar.js"></script>
     <script src="js/servers.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/statistics.js"></script>
 
 </body>
 </html>
