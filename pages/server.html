@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>VS-Bump — Serveur Discord</title>
+    <meta name="description" content="Découvre ce serveur Discord sur VS-Bump.">
+
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/server.css">
+    <link rel="stylesheet" href="../css/cards.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+
+<body>
+
+    <div id="navbar"></div>
+
+    <main>
+
+        <!-- SERVER HEADER -->
+        <section class="server-hero">
+
+            <div class="server-banner" id="server-banner">
+            </div>
+
+            <div class="server-header-content">
+
+                <div class="server-icon-wrapper">
+                    <img
+                        id="server-icon"
+                        src="../assets/images/default-server.png"
+                        alt="Icône du serveur"
+                    >
+                </div>
+
+                <div class="server-main-info">
+
+                    <div class="server-title-row">
+
+                        <h1 id="server-name">
+                            Chargement...
+                        </h1>
+
+                        <span
+                            id="server-verified"
+                            class="verified-badge"
+                            style="display: none;"
+                        >
+                            ✓ Vérifié
+                        </span>
+
+                    </div>
+
+                    <p id="server-short-description">
+                        Chargement de la description...
+                    </p>
+
+                    <div class="server-meta">
+
+                        <span>
+                            👥 <strong id="server-members">0</strong> membres
+                        </span>
+
+                        <span>
+                            🟢 <strong id="server-online">0</strong> en ligne
+                        </span>
+
+                        <span>
+                            🔥 <strong id="server-bumps">0</strong> bumps
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="server-actions">
+
+                    <button
+                        id="bump-button"
+                        class="btn btn-primary"
+                    >
+                        🚀 Bump
+                    </button>
+
+                    <a
+                        id="discord-button"
+                        href="#"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn btn-secondary"
+                    >
+                        💬 Rejoindre
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SERVER CONTENT -->
+        <section class="server-page">
+
+            <div class="server-content">
+
+                <!-- DESCRIPTION -->
+                <article class="server-card">
+
+                    <div class="server-card-header">
+
+                        <span>📖</span>
+
+                        <h2>
+                            À propos du serveur
+                        </h2>
+
+                    </div>
+
+                    <div
+                        id="server-description"
+                        class="server-description"
+                    >
+                        Chargement...
+                    </div>
+
+                </article>
+
+
+                <!-- TAGS -->
+                <article class="server-card">
+
+                    <div class="server-card-header">
+
+                        <span>🏷️</span>
+
+                        <h2>
+                            Tags
+                        </h2>
+
+                    </div>
+
+                    <div
+                        id="server-tags"
+                        class="tags-list"
+                    >
+                        <span class="loading-small">
+                            Chargement...
+                        </span>
+                    </div>
+
+                </article>
+
+
+                <!-- RULES -->
+                <article
+                    id="server-rules-card"
+                    class="server-card"
+                    style="display: none;"
+                >
+
+                    <div class="server-card-header">
+
+                        <span>📜</span>
+
+                        <h2>
+                            Règlement
+                        </h2>
+
+                    </div>
+
+                    <div id="server-rules">
+                    </div>
+
+                </article>
+
+
+                <!-- REVIEWS -->
+                <article class="server-card">
+
+                    <div class="server-card-header">
+
+                        <div>
+                            <span>⭐</span>
+
+                            <h2>
+                                Avis de la communauté
+                            </h2>
+                        </div>
+
+                        <a
+                            href="#reviews"
+                            class="view-all"
+                        >
+                            Voir tous les avis →
+                        </a>
+
+                    </div>
+
+                    <div
+                        id="server-rating"
+                        class="server-rating"
+                    >
+
+                        <div class="rating-score">
+                            <strong id="rating-value">0.0</strong>
+                            <span>⭐</span>
+                        </div>
+
+                        <div class="rating-stars">
+                            ☆☆☆☆☆
+                        </div>
+
+                        <p>
+                            <span id="review-count">0</span> avis
+                        </p>
+
+                    </div>
+
+                    <div
+                        id="reviews-container"
+                        class="reviews-container"
+                    >
+
+                        <div class="loading">
+                            ⏳ Chargement des avis...
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <!-- ADD REVIEW -->
+                <article
+                    id="review-form-card"
+                    class="server-card"
+                >
+
+                    <div class="server-card-header">
+
+                        <span>✍️</span>
+
+                        <h2>
+                            Donner ton avis
+                        </h2>
+
+                    </div>
+
+                    <form id="review-form">
+
+                        <div class="rating-input">
+
+                            <label>
+                                Note
+                            </label>
+
+                            <div
+                                id="rating-stars-input"
+                                class="rating-stars-input"
+                            >
+                                <button type="button" data-rating="1">★</button>
+                                <button type="button" data-rating="2">★</button>
+                                <button type="button" data-rating="3">★</button>
+                                <button type="button" data-rating="4">★</button>
+                                <button type="button" data-rating="5">★</button>
+                            </div>
+
+                            <input
+                                type="hidden"
+                                id="review-rating"
+                                value="0"
+                            >
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="review-content">
+                                Ton avis
+                            </label>
+
+                            <textarea
+                                id="review-content"
+                                name="content"
+                                rows="5"
+                                maxlength="1000"
+                                placeholder="Partage ton expérience avec ce serveur..."
+                                required
+                            ></textarea>
+
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            ⭐ Publier mon avis
+                        </button>
+
+                    </form>
+
+                </article>
+
+            </div>
+
+
+            <!-- SIDEBAR -->
+            <aside class="server-sidebar">
+
+                <!-- SERVER STATS -->
+                <div class="server-card">
+
+                    <div class="server-card-header">
+
+                        <span>📊</span>
+
+                        <h2>
+                            Statistiques
+                        </h2>
+
+                    </div>
+
+                    <div class="server-stats-list">
+
+                        <div class="server-stat">
+                            <span>👥 Membres</span>
+                            <strong id="sidebar-members">0</strong>
+                        </div>
+
+                        <div class="server-stat">
+                            <span>🟢 En ligne</span>
+                            <strong id="sidebar-online">0</strong>
+                        </div>
+
+                        <div class="server-stat">
+                            <span>🚀 Bumps</span>
+                            <strong id="sidebar-bumps">0</strong>
+                        </div>
+
+                        <div class="server-stat">
+                            <span>❤️ Votes</span>
+                            <strong id="sidebar-votes">0</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- INFORMATION -->
+                <div class="server-card">
+
+                    <div class="server-card-header">
+
+                        <span>ℹ️</span>
+
+                        <h2>
+                            Informations
+                        </h2>
+
+                    </div>
+
+                    <div class="server-info-list">
+
+                        <div>
+                            <span>🌍 Langue</span>
+                            <strong id="server-language">Français</strong>
+                        </div>
+
+                        <div>
+                            <span>📅 Ajouté le</span>
+                            <strong id="server-created">--/--/----</strong>
+                        </div>
+
+                        <div>
+                            <span>🔥 Dernier bump</span>
+                            <strong id="server-last-bump">Jamais</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- REPORT -->
+                <div class="server-card report-card">
+
+                    <span>⚠️</span>
+
+                    <h3>
+                        Un problème ?
+                    </h3>
+
+                    <p>
+                        Signale ce serveur à notre équipe.
+                    </p>
+
+                    <button
+                        id="report-server"
+                        class="btn btn-danger"
+                    >
+                        🚨 Signaler
+                    </button>
+
+                </div>
+
+            </aside>
+
+        </section>
+
+    </main>
+
+
+    <div id="footer"></div>
+
+
+    <!-- SCRIPTS -->
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/navbar.js"></script>
+    <script src="../js/server.js"></script>
+    <script src="../js/reviews.js"></script>
+    <script src="../js/notifications.js"></script>
+
+</body>
+</html>
