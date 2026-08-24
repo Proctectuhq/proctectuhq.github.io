@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>VS-Bump — Administration des utilisateurs</title>
+
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/forms.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+
+<body>
+
+    <div id="navbar"></div>
+
+    <main>
+
+        <section class="page-header">
+
+            <div class="page-header-content">
+
+                <span class="section-badge">
+                    🛡️ ADMINISTRATION
+                </span>
+
+                <h1>
+                    Gestion des
+                    <span>utilisateurs</span>
+                </h1>
+
+                <p>
+                    Consulte et gère les utilisateurs de VS-Bump.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- STATISTIQUES -->
+
+        <section class="admin-stats">
+
+            <div class="admin-stat-card">
+                <span>👥</span>
+                <strong id="total-users">0</strong>
+                <p>Total utilisateurs</p>
+            </div>
+
+            <div class="admin-stat-card">
+                <span>🟢</span>
+                <strong id="active-users">0</strong>
+                <p>Utilisateurs actifs</p>
+            </div>
+
+            <div class="admin-stat-card">
+                <span>💎</span>
+                <strong id="premium-users">0</strong>
+                <p>Utilisateurs Premium</p>
+            </div>
+
+            <div class="admin-stat-card">
+                <span>🔴</span>
+                <strong id="banned-users">0</strong>
+                <p>Utilisateurs bannis</p>
+            </div>
+
+        </section>
+
+
+        <!-- FILTRES -->
+
+        <section class="admin-filters">
+
+            <div class="form-group">
+
+                <label for="user-search">
+                    🔎 Rechercher
+                </label>
+
+                <input
+                    type="text"
+                    id="user-search"
+                    placeholder="Nom, ID Discord..."
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="user-status">
+                    📊 Statut
+                </label>
+
+                <select id="user-status">
+
+                    <option value="all">
+                        Tous
+                    </option>
+
+                    <option value="active">
+                        🟢 Actifs
+                    </option>
+
+                    <option value="premium">
+                        💎 Premium
+                    </option>
+
+                    <option value="banned">
+                        🔴 Bannis
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="user-sort">
+                    ↕️ Trier par
+                </label>
+
+                <select id="user-sort">
+
+                    <option value="newest">
+                        Plus récents
+                    </option>
+
+                    <option value="oldest">
+                        Plus anciens
+                    </option>
+
+                    <option value="servers">
+                        Plus de serveurs
+                    </option>
+
+                    <option value="votes">
+                        Plus de votes
+                    </option>
+
+                </select>
+
+            </div>
+
+        </section>
+
+
+        <!-- TABLE -->
+
+        <section class="admin-table-section">
+
+            <div class="section-header">
+
+                <div>
+
+                    <span class="section-badge">
+                        👥 UTILISATEURS
+                    </span>
+
+                    <h2>
+                        Liste des utilisateurs
+                    </h2>
+
+                    <p id="users-count">
+                        Chargement...
+                    </p>
+
+                </div>
+
+                <button
+                    id="refresh-users"
+                    class="btn btn-secondary"
+                    type="button"
+                >
+                    🔄 Actualiser
+                </button>
+
+            </div>
+
+
+            <div class="admin-table-container">
+
+                <table class="admin-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Utilisateur</th>
+                            <th>ID Discord</th>
+                            <th>Serveurs</th>
+                            <th>Votes</th>
+                            <th>Premium</th>
+                            <th>Statut</th>
+                            <th>Inscription</th>
+                            <th>Actions</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="users-table">
+
+                        <tr>
+
+                            <td colspan="8">
+
+                                <div class="loading">
+                                    ⏳ Chargement des utilisateurs...
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- PAGINATION -->
+
+            <div
+                id="pagination"
+                class="pagination"
+            ></div>
+
+        </section>
+
+
+        <!-- MODAL UTILISATEUR -->
+
+        <div
+            id="user-modal"
+            class="modal"
+            style="display: none;"
+        >
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h2>
+                        👤 Informations utilisateur
+                    </h2>
+
+                    <button
+                        id="close-user-modal"
+                        class="modal-close"
+                        type="button"
+                    >
+                        ✕
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="user-details"
+                    class="modal-body"
+                >
+
+                    ⏳ Chargement...
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button
+                        id="ban-user"
+                        class="btn btn-danger"
+                        type="button"
+                    >
+                        🔴 Bannir
+                    </button>
+
+                    <button
+                        id="unban-user"
+                        class="btn btn-primary"
+                        type="button"
+                        style="display: none;"
+                    >
+                        🟢 Débannir
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="admin-notification"
+            class="notification"
+            style="display: none;"
+        ></div>
+
+    </main>
+
+
+    <div id="footer"></div>
+
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/navbar.js"></script>
+    <script src="../js/admin.js"></script>
+    <script src="../js/notifications.js"></script>
+
+</body>
+</html>
