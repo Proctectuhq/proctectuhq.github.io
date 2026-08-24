@@ -1,1 +1,915 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>Paramètres - Proctectuhq AI</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #000;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* =========================
+           NAVBAR
+           ========================= */
+
+        .navbar {
+            height: 65px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 30px;
+
+            background: #080808;
+            border-bottom: 1px solid #222;
+        }
+
+        .logo {
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .back {
+            color: #888;
+            text-decoration: none;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+        }
+
+        .back:hover {
+            color: white;
+        }
+
+
+        /* =========================
+           PAGE
+           ========================= */
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+
+            margin: 0 auto;
+
+            padding: 50px 20px 80px;
+        }
+
+        .title {
+            margin-bottom: 35px;
+        }
+
+        .title h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .title p {
+            color: #777;
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           SECTION
+           ========================= */
+
+        .section {
+            margin-bottom: 25px;
+
+            background: #0c0c0c;
+
+            border: 1px solid #252525;
+
+            border-radius: 15px;
+
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: 20px;
+
+            border-bottom: 1px solid #222;
+        }
+
+        .section-header h2 {
+            font-size: 17px;
+            margin-bottom: 5px;
+        }
+
+        .section-header p {
+            color: #666;
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           SETTING
+           ========================= */
+
+        .setting {
+            min-height: 70px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 20px;
+
+            padding: 18px 20px;
+
+            border-bottom: 1px solid #1d1d1d;
+        }
+
+        .setting:last-child {
+            border-bottom: none;
+        }
+
+        .setting-info {
+            flex: 1;
+        }
+
+        .setting-title {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .setting-description {
+            color: #666;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+
+        /* =========================
+           INPUT
+           ========================= */
+
+        .text-input {
+            width: 230px;
+
+            padding: 11px 13px;
+
+            background: #050505;
+
+            border: 1px solid #333;
+
+            border-radius: 9px;
+
+            color: white;
+
+            outline: none;
+
+            transition: 0.2s;
+        }
+
+        .text-input:focus {
+            border-color: #666;
+        }
+
+
+        /* =========================
+           SELECT
+           ========================= */
+
+        select {
+            padding: 10px 13px;
+
+            background: #050505;
+
+            border: 1px solid #333;
+
+            border-radius: 9px;
+
+            color: white;
+
+            outline: none;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================
+           TOGGLE
+           ========================= */
+
+        .toggle {
+            position: relative;
+
+            width: 48px;
+            height: 27px;
+
+            flex-shrink: 0;
+        }
+
+        .toggle input {
+            opacity: 0;
+
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+
+            inset: 0;
+
+            background: #292929;
+
+            border-radius: 30px;
+
+            cursor: pointer;
+
+            transition: 0.25s;
+        }
+
+        .slider::before {
+            content: "";
+
+            position: absolute;
+
+            width: 21px;
+            height: 21px;
+
+            left: 3px;
+            top: 3px;
+
+            background: white;
+
+            border-radius: 50%;
+
+            transition: 0.25s;
+        }
+
+        .toggle input:checked + .slider {
+            background: #555;
+        }
+
+        .toggle input:checked + .slider::before {
+            transform: translateX(21px);
+        }
+
+
+        /* =========================
+           BUTTONS
+           ========================= */
+
+        .button {
+            padding: 10px 15px;
+
+            border: 1px solid #333;
+
+            border-radius: 9px;
+
+            background: #151515;
+
+            color: white;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .button:hover {
+            background: #222;
+            border-color: #555;
+        }
+
+        .danger {
+            border-color: #442222;
+            color: #ff8a8a;
+        }
+
+        .danger:hover {
+            background: #241111;
+            border-color: #663333;
+        }
+
+
+        /* =========================
+           SAVE
+           ========================= */
+
+        .save-container {
+            display: flex;
+
+            justify-content: flex-end;
+
+            margin-top: 25px;
+        }
+
+        .save-button {
+            padding: 13px 25px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: white;
+
+            color: black;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .save-button:hover {
+            background: #ddd;
+            transform: translateY(-1px);
+        }
+
+
+        /* =========================
+           MESSAGE
+           ========================= */
+
+        #message {
+            display: none;
+
+            position: fixed;
+
+            right: 20px;
+            bottom: 20px;
+
+            padding: 13px 18px;
+
+            background: #111;
+
+            border: 1px solid #333;
+
+            border-radius: 10px;
+
+            color: white;
+
+            font-size: 13px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        }
+
+
+        /* =========================
+           MOBILE
+           ========================= */
+
+        @media (max-width: 650px) {
+
+            .navbar {
+                padding: 0 15px;
+            }
+
+            .container {
+                padding: 30px 12px 60px;
+            }
+
+            .setting {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .text-input {
+                width: 100%;
+            }
+
+            select {
+                width: 100%;
+            }
+
+            .setting > .toggle {
+                align-self: flex-end;
+                margin-top: -35px;
+            }
+
+            .save-container {
+                justify-content: stretch;
+            }
+
+            .save-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         NAVBAR
+         ========================= -->
+
+    <header class="navbar">
+
+        <div class="logo">
+            🤖 Proctectuhq AI
+        </div>
+
+        <a
+            href="chat.html"
+            class="back"
+        >
+            ← Retour au chat
+        </a>
+
+    </header>
+
+
+    <!-- =========================
+         CONTENU
+         ========================= -->
+
+    <main class="container">
+
+        <div class="title">
+
+            <h1>⚙️ Paramètres</h1>
+
+            <p>
+                Personnalise ton expérience Proctectuhq AI.
+            </p>
+
+        </div>
+
+
+        <!-- =========================
+             PROFIL
+             ========================= -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <h2>👤 Profil</h2>
+
+                <p>
+                    Informations de ton compte.
+                </p>
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-info">
+
+                    <div class="setting-title">
+                        Nom d'utilisateur
+                    </div>
+
+                    <div class="setting-description">
+                        Le nom affiché sur ton compte.
+                    </div>
+
+                </div>
+
+                <input
+                    id="username"
+                    class="text-input"
+                    type="text"
+                    placeholder="Ton pseudo"
+                >
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-info">
+
+                    <div class="setting-title">
+                        Adresse e-mail
+                    </div>
+
+                    <div class="setting-description">
+                        Ton adresse e-mail associée au compte.
+                    </div>
+
+                </div>
+
+                <input
+                    id="email"
+                    class="text-input"
+                    type="email"
+                    placeholder="exemple@email.com"
+                >
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             APPARENCE
+             ========================= -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <h2>🎨 Apparence</h2>
+
+                <p>
+                    Personnalise l'apparence du site.
+                </p>
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-info">
+
+                    <div class="setting-title">
+                        Thème
+                    </div>
+
+                    <div class="setting-description">
+                        Choisis le thème de l'interface.
+                    </div>
+
+                </div>
+
+                <select id="theme">
+
+                    <option value="dark">
+                        🌑 Sombre
+                    </option>
+
+                    <option value="system">
+                        💻 Système
+                    </option>
+
+                </select>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             NOTIFICATIONS
+             ========================= -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <h2>🔔 Notifications</h2>
+
+                <p>
+                    Gère les notifications de ton compte.
+                </p>
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-info">
+
+                    <div class="setting-title">
+                        Notifications
+                    </div>
+
+                    <div class="setting-description">
+                        Autoriser les notifications.
+                    </div>
+
+                </div>
+
+                <label class="toggle">
+
+                    <input
+                        type="checkbox"
+                        id="notifications"
+                        checked
+                    >
+
+                    <span class="slider"></span>
+
+                </label>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             IA
+             ========================= -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <h2>🤖 Intelligence artificielle</h2>
+
+                <p>
+                    Configure le comportement de l'IA.
+                </p>
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-info">
+
+                    <div class="setting-title">
+                        Réponses détaillées
+                    </div>
+
+                    <div class="setting-description">
+                        L'IA donnera des réponses plus longues
+                        et plus détaillées.
+                    </div>
+
+                </div>
+
+                <label class="toggle">
+
+                    <input
+                        type="checkbox"
+                        id="detailedAnswers"
+                        checked
+                    >
+
+                    <span class="slider"></span>
+
+                </label>
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-info">
+
+                    <div class="setting-title">
+                        Modèle
+                    </div>
+
+                    <div class="setting-description">
+                        Modèle utilisé par l'IA.
+                    </div>
+
+                </div>
+
+                <select id="model">
+
+                    <option value="default">
+                        🤖 Proctectuhq AI
+                    </option>
+
+                    <option value="fast">
+                        ⚡ Proctectuhq AI Fast
+                    </option>
+
+                </select>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             DONNÉES
+             ========================= -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <h2>🗑️ Données</h2>
+
+                <p>
+                    Gère tes données et conversations.
+                </p>
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-info">
+
+                    <div class="setting-title">
+                        Effacer les conversations
+                    </div>
+
+                    <div class="setting-description">
+                        Supprime les conversations enregistrées
+                        sur cet appareil.
+                    </div>
+
+                </div>
+
+                <button
+                    class="button danger"
+                    onclick="clearConversations()"
+                >
+                    🗑️ Effacer
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             SAUVEGARDER
+             ========================= -->
+
+        <div class="save-container">
+
+            <button
+                class="save-button"
+                onclick="saveSettings()"
+            >
+                💾 Enregistrer les paramètres
+            </button>
+
+        </div>
+
+    </main>
+
+
+    <div id="message"></div>
+
+
+    <script>
+
+        /* =========================
+           CHARGER LES PARAMÈTRES
+           ========================= */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function() {
+
+                const settings =
+                    JSON.parse(
+                        localStorage.getItem(
+                            "proctectuhqSettings"
+                        )
+                    );
+
+                if (!settings) {
+                    return;
+                }
+
+                document.getElementById(
+                    "username"
+                ).value = settings.username || "";
+
+                document.getElementById(
+                    "email"
+                ).value = settings.email || "";
+
+                document.getElementById(
+                    "theme"
+                ).value = settings.theme || "dark";
+
+                document.getElementById(
+                    "notifications"
+                ).checked =
+                    settings.notifications !== false;
+
+                document.getElementById(
+                    "detailedAnswers"
+                ).checked =
+                    settings.detailedAnswers !== false;
+
+                document.getElementById(
+                    "model"
+                ).value =
+                    settings.model || "default";
+            }
+        );
+
+
+        /* =========================
+           SAUVEGARDER
+           ========================= */
+
+        function saveSettings() {
+
+            const settings = {
+
+                username:
+                    document.getElementById(
+                        "username"
+                    ).value,
+
+                email:
+                    document.getElementById(
+                        "email"
+                    ).value,
+
+                theme:
+                    document.getElementById(
+                        "theme"
+                    ).value,
+
+                notifications:
+                    document.getElementById(
+                        "notifications"
+                    ).checked,
+
+                detailedAnswers:
+                    document.getElementById(
+                        "detailedAnswers"
+                    ).checked,
+
+                model:
+                    document.getElementById(
+                        "model"
+                    ).value
+            };
+
+
+            localStorage.setItem(
+                "proctectuhqSettings",
+                JSON.stringify(settings)
+            );
+
+
+            showMessage(
+                "✅ Paramètres enregistrés !"
+            );
+        }
+
+
+        /* =========================
+           EFFACER LES CONVERSATIONS
+           ========================= */
+
+        function clearConversations() {
+
+            const confirmed =
+                confirm(
+                    "⚠️ Veux-tu vraiment effacer les conversations ?"
+                );
+
+            if (!confirmed) {
+                return;
+            }
+
+
+            localStorage.removeItem(
+                "firstQuestion"
+            );
+
+            localStorage.removeItem(
+                "proctectuhqConversations"
+            );
+
+
+            showMessage(
+                "🗑️ Conversations effacées."
+            );
+        }
+
+
+        /* =========================
+           MESSAGE
+           ========================= */
+
+        function showMessage(text) {
+
+            const message =
+                document.getElementById(
+                    "message"
+                );
+
+            message.textContent = text;
+
+            message.style.display = "block";
+
+
+            setTimeout(function() {
+
+                message.style.display = "none";
+
+            }, 2500);
+        }
+
+    </script>
+
+</body>
+</html>
