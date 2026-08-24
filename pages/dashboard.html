@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>VS-Bump — Dashboard</title>
+    <meta name="description" content="Gère ton compte et tes serveurs Discord sur VS-Bump.">
+
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/cards.css">
+    <link rel="stylesheet" href="../css/forms.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+
+<body>
+
+    <div id="navbar"></div>
+
+    <main>
+
+        <!-- DASHBOARD HEADER -->
+        <section class="dashboard-header">
+
+            <div class="dashboard-welcome">
+
+                <span class="section-badge">👋 MON ESPACE</span>
+
+                <h1>
+                    Bonjour,
+                    <span id="user-name">Utilisateur</span> !
+                </h1>
+
+                <p>
+                    Bienvenue dans ton tableau de bord VS-Bump.
+                </p>
+
+            </div>
+
+            <div class="dashboard-user">
+
+                <img
+                    id="user-avatar"
+                    src="../assets/images/default-avatar.png"
+                    alt="Avatar"
+                >
+
+                <div>
+                    <strong id="user-username">
+                        Chargement...
+                    </strong>
+
+                    <span>
+                        🟢 Connecté avec Discord
+                    </span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- QUICK STATS -->
+        <section class="dashboard-stats">
+
+            <div class="stat-card">
+                <span class="stat-icon">🌐</span>
+                <strong id="my-servers">0</strong>
+                <p>Mes serveurs</p>
+            </div>
+
+            <div class="stat-card">
+                <span class="stat-icon">🚀</span>
+                <strong id="my-bumps">0</strong>
+                <p>Bumps effectués</p>
+            </div>
+
+            <div class="stat-card">
+                <span class="stat-icon">❤️</span>
+                <strong id="my-votes">0</strong>
+                <p>Votes reçus</p>
+            </div>
+
+            <div class="stat-card">
+                <span class="stat-icon">⭐</span>
+                <strong id="my-reviews">0</strong>
+                <p>Avis publiés</p>
+            </div>
+
+        </section>
+
+
+        <!-- ACTIONS -->
+        <section class="dashboard-actions">
+
+            <div class="section-header">
+
+                <div>
+                    <span class="section-badge">⚡ ACTIONS</span>
+
+                    <h2>
+                        Actions rapides
+                    </h2>
+                </div>
+
+            </div>
+
+
+            <div class="action-grid">
+
+                <a href="add-server.html" class="action-card">
+
+                    <span>➕</span>
+
+                    <div>
+                        <h3>
+                            Ajouter un serveur
+                        </h3>
+
+                        <p>
+                            Référence ton serveur Discord sur VS-Bump.
+                        </p>
+                    </div>
+
+                    <strong>→</strong>
+
+                </a>
+
+
+                <a href="statistics.html" class="action-card">
+
+                    <span>📊</span>
+
+                    <div>
+                        <h3>
+                            Statistiques
+                        </h3>
+
+                        <p>
+                            Consulte les performances de tes serveurs.
+                        </p>
+                    </div>
+
+                    <strong>→</strong>
+
+                </a>
+
+
+                <a href="votes.html" class="action-card">
+
+                    <span>❤️</span>
+
+                    <div>
+                        <h3>
+                            Mes votes
+                        </h3>
+
+                        <p>
+                            Consulte ton historique de votes.
+                        </p>
+                    </div>
+
+                    <strong>→</strong>
+
+                </a>
+
+
+                <a href="reviews.html" class="action-card">
+
+                    <span>⭐</span>
+
+                    <div>
+                        <h3>
+                            Mes avis
+                        </h3>
+
+                        <p>
+                            Gère les avis que tu as publiés.
+                        </p>
+                    </div>
+
+                    <strong>→</strong>
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- MY SERVERS -->
+        <section class="dashboard-servers">
+
+            <div class="section-header">
+
+                <div>
+                    <span class="section-badge">🌐 SERVEURS</span>
+
+                    <h2>
+                        Mes serveurs
+                    </h2>
+
+                    <p>
+                        Gère les serveurs Discord que tu as ajoutés.
+                    </p>
+                </div>
+
+                <a
+                    href="add-server.html"
+                    class="btn btn-primary"
+                >
+                    ➕ Ajouter
+                </a>
+
+            </div>
+
+
+            <div
+                id="my-servers-container"
+                class="server-grid"
+            >
+
+                <div class="loading">
+
+                    <span>⏳</span>
+
+                    <p>
+                        Chargement de tes serveurs...
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ACCOUNT -->
+        <section class="dashboard-account">
+
+            <div class="section-header">
+
+                <div>
+                    <span class="section-badge">⚙️ COMPTE</span>
+
+                    <h2>
+                        Mon compte
+                    </h2>
+                </div>
+
+            </div>
+
+
+            <div class="account-card">
+
+                <div class="account-info">
+
+                    <img
+                        id="account-avatar"
+                        src="../assets/images/default-avatar.png"
+                        alt="Avatar"
+                    >
+
+                    <div>
+
+                        <h3 id="account-name">
+                            Utilisateur
+                        </h3>
+
+                        <p id="account-id">
+                            Discord ID : --
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="account-actions">
+
+                    <button
+                        id="logout-button"
+                        class="btn btn-danger"
+                        type="button"
+                    >
+                        🚪 Se déconnecter
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <div id="footer"></div>
+
+
+    <!-- SCRIPTS -->
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/navbar.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script src="../js/notifications.js"></script>
+
+</body>
+</html>
