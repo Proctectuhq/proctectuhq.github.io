@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>VS-Bump — Logs administrateur</title>
+
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/forms.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+
+<body>
+
+    <div id="navbar"></div>
+
+    <main>
+
+        <section class="page-header">
+
+            <div class="page-header-content">
+
+                <span class="section-badge">
+                    🛡️ ADMINISTRATION
+                </span>
+
+                <h1>
+                    Logs
+                    <span>administrateur</span>
+                </h1>
+
+                <p>
+                    Consulte l'historique des actions effectuées sur VS-Bump.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- STATISTIQUES -->
+
+        <section class="admin-stats">
+
+            <div class="admin-stat-card">
+                <span>📋</span>
+                <strong id="total-logs">0</strong>
+                <p>Total des logs</p>
+            </div>
+
+            <div class="admin-stat-card">
+                <span>👤</span>
+                <strong id="admin-actions">0</strong>
+                <p>Actions administrateur</p>
+            </div>
+
+            <div class="admin-stat-card">
+                <span>⚠️</span>
+                <strong id="security-events">0</strong>
+                <p>Événements sécurité</p>
+            </div>
+
+            <div class="admin-stat-card">
+                <span>🕐</span>
+                <strong id="today-logs">0</strong>
+                <p>Logs aujourd'hui</p>
+            </div>
+
+        </section>
+
+
+        <!-- FILTRES -->
+
+        <section class="admin-filters">
+
+            <div class="form-group">
+
+                <label for="log-search">
+                    🔎 Rechercher
+                </label>
+
+                <input
+                    type="text"
+                    id="log-search"
+                    placeholder="Action, utilisateur, ID..."
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="log-type">
+                    📂 Type
+                </label>
+
+                <select id="log-type">
+
+                    <option value="all">
+                        Tous
+                    </option>
+
+                    <option value="admin">
+                        🛡️ Administration
+                    </option>
+
+                    <option value="user">
+                        👤 Utilisateur
+                    </option>
+
+                    <option value="server">
+                        🌐 Serveur
+                    </option>
+
+                    <option value="security">
+                        🔐 Sécurité
+                    </option>
+
+                    <option value="system">
+                        ⚙️ Système
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="log-level">
+                    ⚠️ Niveau
+                </label>
+
+                <select id="log-level">
+
+                    <option value="all">
+                        Tous
+                    </option>
+
+                    <option value="info">
+                        🔵 Information
+                    </option>
+
+                    <option value="warning">
+                        🟠 Avertissement
+                    </option>
+
+                    <option value="error">
+                        🔴 Erreur
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="log-date">
+                    📅 Période
+                </label>
+
+                <select id="log-date">
+
+                    <option value="all">
+                        Toutes
+                    </option>
+
+                    <option value="today">
+                        Aujourd'hui
+                    </option>
+
+                    <option value="week">
+                        Cette semaine
+                    </option>
+
+                    <option value="month">
+                        Ce mois
+                    </option>
+
+                </select>
+
+            </div>
+
+        </section>
+
+
+        <!-- LOGS -->
+
+        <section class="admin-table-section">
+
+            <div class="section-header">
+
+                <div>
+
+                    <span class="section-badge">
+                        📋 HISTORIQUE
+                    </span>
+
+                    <h2>
+                        Journal des actions
+                    </h2>
+
+                    <p id="logs-count">
+                        Chargement...
+                    </p>
+
+                </div>
+
+                <div class="section-actions">
+
+                    <button
+                        id="refresh-logs"
+                        class="btn btn-secondary"
+                        type="button"
+                    >
+                        🔄 Actualiser
+                    </button>
+
+                    <button
+                        id="clear-filters"
+                        class="btn btn-secondary"
+                        type="button"
+                    >
+                        🧹 Réinitialiser
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="admin-table-container">
+
+                <table class="admin-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Niveau</th>
+                            <th>Utilisateur</th>
+                            <th>Action</th>
+                            <th>Cible</th>
+                            <th>Adresse IP</th>
+                            <th>Détails</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="logs-table">
+
+                        <tr>
+
+                            <td colspan="8">
+
+                                <div class="loading">
+                                    ⏳ Chargement des logs...
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- PAGINATION -->
+
+            <div
+                id="pagination"
+                class="pagination"
+            ></div>
+
+        </section>
+
+
+        <!-- MODAL LOG -->
+
+        <div
+            id="log-modal"
+            class="modal"
+            style="display: none;"
+        >
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h2>
+                        📋 Détails du log
+                    </h2>
+
+                    <button
+                        id="close-log-modal"
+                        class="modal-close"
+                        type="button"
+                    >
+                        ✕
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="log-details"
+                    class="modal-body"
+                >
+
+                    ⏳ Chargement...
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button
+                        id="close-log-details"
+                        class="btn btn-secondary"
+                        type="button"
+                    >
+                        Fermer
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="admin-notification"
+            class="notification"
+            style="display: none;"
+        ></div>
+
+    </main>
+
+
+    <div id="footer"></div>
+
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/navbar.js"></script>
+    <script src="../js/admin.js"></script>
+    <script src="../js/notifications.js"></script>
+
+</body>
+</html>
