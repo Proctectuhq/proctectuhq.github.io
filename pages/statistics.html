@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>VS-Bump — Statistiques</title>
+    <meta name="description" content="Consulte les statistiques de ton serveur Discord sur VS-Bump.">
+
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/cards.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+
+<body>
+
+    <div id="navbar"></div>
+
+    <main>
+
+        <section class="page-header">
+
+            <div class="page-header-content">
+
+                <span class="section-badge">📊 STATISTIQUES</span>
+
+                <h1>
+                    Statistiques de ton
+                    <span>serveur</span>
+                </h1>
+
+                <p>
+                    Analyse les performances de ton serveur sur VS-Bump.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <section class="statistics-page">
+
+            <!-- SERVER SELECT -->
+            <div class="server-selector-card">
+
+                <label for="server-select">
+                    🌐 Sélectionner un serveur
+                </label>
+
+                <select id="server-select">
+
+                    <option value="">
+                        Chargement des serveurs...
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- OVERVIEW -->
+            <section class="statistics-overview">
+
+                <div class="stat-card">
+
+                    <span class="stat-icon">👥</span>
+
+                    <strong id="stat-members">
+                        0
+                    </strong>
+
+                    <p>
+                        Membres
+                    </p>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span class="stat-icon">🚀</span>
+
+                    <strong id="stat-bumps">
+                        0
+                    </strong>
+
+                    <p>
+                        Bumps
+                    </p>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span class="stat-icon">❤️</span>
+
+                    <strong id="stat-votes">
+                        0
+                    </strong>
+
+                    <p>
+                        Votes
+                    </p>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span class="stat-icon">⭐</span>
+
+                    <strong id="stat-rating">
+                        0.0
+                    </strong>
+
+                    <p>
+                        Note moyenne
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- BUMPS -->
+            <section class="statistics-card">
+
+                <div class="statistics-card-header">
+
+                    <div>
+
+                        <span>🚀</span>
+
+                        <h2>
+                            Bumps
+                        </h2>
+
+                        <p>
+                            Évolution des bumps de ton serveur.
+                        </p>
+
+                    </div>
+
+                    <select id="bumps-period">
+
+                        <option value="7">7 jours</option>
+                        <option value="30">30 jours</option>
+                        <option value="90">90 jours</option>
+                        <option value="365">1 an</option>
+
+                    </select>
+
+                </div>
+
+
+                <div
+                    id="bumps-chart"
+                    class="chart-container"
+                >
+
+                    <div class="loading">
+                        ⏳ Chargement des données...
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- VOTES -->
+            <section class="statistics-card">
+
+                <div class="statistics-card-header">
+
+                    <div>
+
+                        <span>❤️</span>
+
+                        <h2>
+                            Votes
+                        </h2>
+
+                        <p>
+                            Évolution des votes reçus.
+                        </p>
+
+                    </div>
+
+                    <select id="votes-period">
+
+                        <option value="7">7 jours</option>
+                        <option value="30">30 jours</option>
+                        <option value="90">90 jours</option>
+                        <option value="365">1 an</option>
+
+                    </select>
+
+                </div>
+
+
+                <div
+                    id="votes-chart"
+                    class="chart-container"
+                >
+
+                    <div class="loading">
+                        ⏳ Chargement des données...
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- MEMBERS -->
+            <section class="statistics-card">
+
+                <div class="statistics-card-header">
+
+                    <div>
+
+                        <span>👥</span>
+
+                        <h2>
+                            Membres
+                        </h2>
+
+                        <p>
+                            Évolution du nombre de membres.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="members-chart"
+                    class="chart-container"
+                >
+
+                    <div class="loading">
+                        ⏳ Chargement des données...
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- SUMMARY -->
+            <section class="statistics-summary">
+
+                <div class="summary-card">
+
+                    <span>📈</span>
+
+                    <div>
+
+                        <strong id="growth-rate">
+                            +0%
+                        </strong>
+
+                        <p>
+                            Croissance
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <span>🔥</span>
+
+                    <div>
+
+                        <strong id="best-day">
+                            --
+                        </strong>
+
+                        <p>
+                            Meilleur jour
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <span>🏆</span>
+
+                    <div>
+
+                        <strong id="server-ranking">
+                            #--
+                        </strong>
+
+                        <p>
+                            Classement
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- EXPORT -->
+            <div class="statistics-actions">
+
+                <button
+                    id="refresh-statistics"
+                    class="btn btn-secondary"
+                    type="button"
+                >
+                    🔄 Actualiser
+                </button>
+
+                <button
+                    id="export-statistics"
+                    class="btn btn-primary"
+                    type="button"
+                >
+                    📥 Exporter les statistiques
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <div id="footer"></div>
+
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/navbar.js"></script>
+    <script src="../js/statistics.js"></script>
+    <script src="../js/notifications.js"></script>
+
+</body>
+</html>
