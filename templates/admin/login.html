@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Connexion Admin • {{ config.SITE_NAME }}
+{% endblock %}
+
+{% block description %}
+    Connexion au panneau d'administration de {{ config.SITE_NAME }}.
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/admin.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-login-page">
+
+    <div class="admin-login-card">
+
+        <!-- Logo -->
+
+        <div class="admin-login-logo">
+            <div class="admin-login-icon">
+                🔐
+            </div>
+
+            <span class="admin-badge">
+                ADMINISTRATION
+            </span>
+
+            <h1>
+                Panneau Admin
+            </h1>
+
+            <p>
+                Connecte-toi pour accéder à la gestion
+                de {{ config.SITE_NAME }}.
+            </p>
+        </div>
+
+
+        <!-- Flash messages -->
+
+        {% with messages = get_flashed_messages(
+            with_categories=true
+        ) %}
+
+            {% if messages %}
+
+                <div class="admin-flashes">
+
+                    {% for category, message in messages %}
+
+                        <div class="admin-flash admin-flash-{{ category }}">
+
+                            {% if category == "success" %}
+                                ✅
+                            {% elif category == "error" %}
+                                ❌
+                            {% elif category == "warning" %}
+                                ⚠️
+                            {% else %}
+                                ℹ️
+                            {% endif %}
+
+                            <span>
+                                {{ message }}
+                            </span>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <!-- Login form -->
+
+        <form
+            action="{{ url_for('admin.login') }}"
+            method="POST"
+            class="admin-login-form"
+        >
+
+            <!-- CSRF -->
+            {% if csrf_token is defined %}
+
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="{{ csrf_token() }}"
+                >
+
+            {% endif %}
+
+
+            <!-- Username -->
+
+            <div class="admin-form-group">
+
+                <label for="username">
+                    👤 Nom d'utilisateur
+                </label>
+
+                <div class="admin-input-wrapper">
+
+                    <span>
+                        👤
+                    </span>
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Nom d'utilisateur"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- Password -->
+
+            <div class="admin-form-group">
+
+                <div class="admin-label-row">
+
+                    <label for="password">
+                        🔑 Mot de passe
+                    </label>
+
+                </div>
+
+                <div class="admin-input-wrapper">
+
+                    <span>
+                        🔒
+                    </span>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Mot de passe"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        onclick="togglePassword()"
+                        aria-label="Afficher le mot de passe"
+                    >
+                        👁️
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- Remember -->
+
+            <div class="admin-login-options">
+
+                <label class="admin-checkbox">
+
+                    <input
+                        type="checkbox"
+                        name="remember"
+                        value="1"
+                    >
+
+                    <span>
+                        Se souvenir de moi
+                    </span>
+
+                </label>
+
+            </div>
+
+
+            <!-- Submit -->
+
+            <button
+                type="submit"
+                class="admin-login-button"
+            >
+                🔐 Se connecter
+            </button>
+
+        </form>
+
+
+        <!-- Security -->
+
+        <div class="admin-security">
+
+            <span class="admin-security-icon">
+                🛡️
+            </span>
+
+            <div>
+
+                <strong>
+                    Zone sécurisée
+                </strong>
+
+                <p>
+                    Cette page est réservée aux administrateurs.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Return -->
+
+        <div class="admin-login-footer">
+
+            <a href="{{ url_for('home.index') }}">
+                ← Retour au site
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script>
+
+function togglePassword() {
+
+    const passwordInput = document.getElementById("password");
+
+    if (!passwordInput) {
+        return;
+    }
+
+    if (passwordInput.type === "password") {
+
+        passwordInput.type = "text";
+
+    } else {
+
+        passwordInput.type = "password";
+
+    }
+
+}
+
+</script>
+
+{% endblock %}
