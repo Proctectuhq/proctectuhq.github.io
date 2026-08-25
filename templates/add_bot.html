@@ -1,0 +1,275 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Ajouter un serveur • {{ config.SITE_NAME }}
+{% endblock %}
+
+{% block description %}
+    Ajoute ton serveur Discord à {{ config.SITE_NAME }}.
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/style.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<div class="add-bot-page">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <section class="add-bot-header">
+
+        <span class="section-badge">
+            🤖 Configuration
+        </span>
+
+        <h1>
+            Ajoute ton serveur Discord
+        </h1>
+
+        <p>
+            Installe le bot {{ config.SITE_NAME }} sur ton serveur
+            pour commencer à utiliser le système de bumps.
+        </p>
+
+    </section>
+
+
+    <!-- =========================
+         ETAPES
+    ========================== -->
+
+    <section class="add-bot-steps">
+
+        <div class="add-bot-step active">
+
+            <div class="step-number">
+                1
+            </div>
+
+            <div>
+
+                <strong>
+                    Ajouter le bot
+                </strong>
+
+                <span>
+                    Invite le bot sur ton serveur
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="step-line"></div>
+
+
+        <div class="add-bot-step">
+
+            <div class="step-number">
+                2
+            </div>
+
+            <div>
+
+                <strong>
+                    Configurer
+                </strong>
+
+                <span>
+                    Configure ton serveur
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="step-line"></div>
+
+
+        <div class="add-bot-step">
+
+            <div class="step-number">
+                3
+            </div>
+
+            <div>
+
+                <strong>
+                    Bumper
+                </strong>
+
+                <span>
+                    Commence à gagner de la visibilité
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         BOT CARD
+    ========================== -->
+
+    <section class="add-bot-card">
+
+        <div class="add-bot-icon">
+            🤖
+        </div>
+
+        <div class="add-bot-content">
+
+            <span class="bot-status">
+                🟢 Bot disponible
+            </span>
+
+            <h2>
+                {{ config.SITE_NAME }} Bot
+            </h2>
+
+            <p>
+                Le bot permet de gérer les bumps directement
+                depuis Discord et de synchroniser ton serveur
+                avec le site.
+            </p>
+
+
+            <!-- Permissions -->
+
+            <div class="bot-permissions">
+
+                <h3>
+                    🔐 Permissions nécessaires
+                </h3>
+
+                <div class="permission-list">
+
+                    <div class="permission-item">
+                        <span>✅</span>
+                        <span>Voir les salons</span>
+                    </div>
+
+                    <div class="permission-item">
+                        <span>✅</span>
+                        <span>Envoyer des messages</span>
+                    </div>
+
+                    <div class="permission-item">
+                        <span>✅</span>
+                        <span>Intégrer des liens</span>
+                    </div>
+
+                    <div class="permission-item">
+                        <span>✅</span>
+                        <span>Utiliser les commandes slash</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Invite -->
+
+            <div class="add-bot-action">
+
+                <a
+                    href="{{ config.DISCORD_BOT_INVITE_URL }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn btn-primary add-bot-button"
+                >
+                    🤖 Ajouter le bot à Discord
+                </a>
+
+                <p>
+                    Tu dois avoir la permission
+                    <strong>Gérer le serveur</strong>
+                    ou être administrateur.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         APRES INSTALLATION
+    ========================== -->
+
+    <section class="add-bot-next">
+
+        <div class="next-icon">
+            ⚡
+        </div>
+
+        <div class="next-content">
+
+            <h2>
+                Bot déjà installé ?
+            </h2>
+
+            <p>
+                Si le bot est déjà présent sur ton serveur,
+                synchronise tes serveurs Discord.
+            </p>
+
+        </div>
+
+        <a
+            href="/dashboard"
+            class="btn btn-secondary"
+        >
+            🔄 Synchroniser
+        </a>
+
+    </section>
+
+
+    <!-- =========================
+         AIDE
+    ========================== -->
+
+    <section class="add-bot-help">
+
+        <div class="help-icon">
+            💡
+        </div>
+
+        <div>
+
+            <h3>
+                Comment ça fonctionne ?
+            </h3>
+
+            <p>
+                1️⃣ Invite le bot sur ton serveur.
+                <br>
+                2️⃣ Le bot détecte automatiquement ton serveur.
+                <br>
+                3️⃣ Configure ta fiche depuis ton dashboard.
+                <br>
+                4️⃣ Utilise la commande de bump pour apparaître
+                dans le classement.
+            </p>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}
