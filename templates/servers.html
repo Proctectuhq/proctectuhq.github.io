@@ -1,0 +1,547 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Serveurs • {{ config.SITE_NAME }}
+{% endblock %}
+
+{% block description %}
+    Découvre les serveurs Discord disponibles sur {{ config.SITE_NAME }}.
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/style.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<div class="servers-page">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <section class="servers-header">
+
+        <div class="servers-header-content">
+
+            <span class="section-badge">
+                🖥️ Découvrir
+            </span>
+
+            <h1>
+                Découvre des serveurs Discord
+            </h1>
+
+            <p>
+                Trouve une communauté qui correspond à tes
+                centres d'intérêt.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         RECHERCHE
+    ========================== -->
+
+    <section class="servers-search-section">
+
+        <form
+            action="/search"
+            method="GET"
+            class="servers-search-form"
+        >
+
+            <div class="search-input-wrapper">
+
+                <span class="search-icon">
+                    🔎
+                </span>
+
+                <input
+                    type="text"
+                    name="q"
+                    placeholder="Rechercher un serveur..."
+                    value="{{ request.args.get('q', '') }}"
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <select
+                name="category"
+                class="category-select"
+            >
+
+                <option value="">
+                    📂 Toutes les catégories
+                </option>
+
+                {% if categories %}
+
+                    {% for category in categories %}
+
+                        <option
+                            value="{{ category }}"
+                            {% if request.args.get('category') == category %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ category }}
+                        </option>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <option value="Gaming">
+                        🎮 Gaming
+                    </option>
+
+                    <option value="Communauté">
+                        👥 Communauté
+                    </option>
+
+                    <option value="Anime">
+                        🍥 Anime
+                    </option>
+
+                    <option value="Musique">
+                        🎵 Musique
+                    </option>
+
+                    <option value="Développement">
+                        💻 Développement
+                    </option>
+
+                    <option value="Roleplay">
+                        🎭 Roleplay
+                    </option>
+
+                {% endif %}
+
+            </select>
+
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+            >
+                🔎 Rechercher
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- =========================
+         FILTRES
+    ========================== -->
+
+    <section class="servers-filters">
+
+        <div class="filter-title">
+            <span>
+                ⚡
+            </span>
+
+            <strong>
+                Trier par
+            </strong>
+        </div>
+
+
+        <div class="filter-buttons">
+
+            <a
+                href="/servers?sort=bumps"
+                class="filter-button {% if request.args.get('sort', 'bumps') == 'bumps' %}active{% endif %}"
+            >
+                🚀 Plus de bumps
+            </a>
+
+            <a
+                href="/servers?sort=members"
+                class="filter-button {% if request.args.get('sort') == 'members' %}active{% endif %}"
+            >
+                👥 Plus de membres
+            </a>
+
+            <a
+                href="/servers?sort=views"
+                class="filter-button {% if request.args.get('sort') == 'views' %}active{% endif %}"
+            >
+                👁️ Plus vus
+            </a>
+
+            <a
+                href="/servers?sort=newest"
+                class="filter-button {% if request.args.get('sort') == 'newest' %}active{% endif %}"
+            >
+                🆕 Plus récents
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         SERVEURS
+    ========================== -->
+
+    <section class="servers-list-section">
+
+        <div class="servers-list-header">
+
+            <div>
+
+                <h2>
+                    Serveurs Discord
+                </h2>
+
+                <p>
+                    {{ servers|length if servers else 0 }}
+                    serveur(s) disponible(s)
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="servers-grid">
+
+            {% if servers %}
+
+                {% for server in servers %}
+
+                    <article class="server-card">
+
+                        <!-- Server Header -->
+
+                        <div class="server-card-header">
+
+                            {% if server.icon %}
+
+                                <img
+                                    src="{{ server.icon }}"
+                                    alt="{{ server.name }}"
+                                    class="server-icon"
+                                    loading="lazy"
+                                >
+
+                            {% else %}
+
+                                <div class="server-icon-placeholder">
+                                    🖥️
+                                </div>
+
+                            {% endif %}
+
+
+                            <div class="server-info">
+
+                                <h3>
+                                    {{ server.name }}
+                                </h3>
+
+                                <span class="server-id">
+                                    ID : {{ server.guild_id }}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Description -->
+
+                        <div class="server-card-body">
+
+                            <p class="server-description">
+
+                                {% if server.description %}
+
+                                    {{ server.description }}
+
+                                {% else %}
+
+                                    Aucune description disponible.
+
+                                {% endif %}
+
+                            </p>
+
+
+                            <!-- Tags -->
+
+                            {% if server.tags %}
+
+                                <div class="server-tags">
+
+                                    {% for tag in server.tags[:4] %}
+
+                                        <span class="server-tag">
+                                            #{{ tag }}
+                                        </span>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Statistics -->
+
+                        <div class="server-card-stats">
+
+                            <div class="server-stat">
+
+                                <span class="server-stat-icon">
+                                    🚀
+                                </span>
+
+                                <div>
+
+                                    <strong>
+                                        {{ server.bump_count or 0 }}
+                                    </strong>
+
+                                    <small>
+                                        Bumps
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="server-stat">
+
+                                <span class="server-stat-icon">
+                                    👥
+                                </span>
+
+                                <div>
+
+                                    <strong>
+                                        {{ server.members or 0 }}
+                                    </strong>
+
+                                    <small>
+                                        Membres
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="server-stat">
+
+                                <span class="server-stat-icon">
+                                    👁️
+                                </span>
+
+                                <div>
+
+                                    <strong>
+                                        {{ server.views or 0 }}
+                                    </strong>
+
+                                    <small>
+                                        Visites
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Footer -->
+
+                        <div class="server-card-footer">
+
+                            <a
+                                href="/server/{{ server.guild_id }}"
+                                class="server-view-button"
+                            >
+                                👁️ Voir le serveur
+                            </a>
+
+
+                            {% if server.invite %}
+
+                                <a
+                                    href="{{ server.invite }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="server-join-button"
+                                >
+                                    🔗 Rejoindre
+                                </a>
+
+                            {% endif %}
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="servers-empty">
+
+                    <div class="servers-empty-icon">
+                        🔎
+                    </div>
+
+                    <h2>
+                        Aucun serveur trouvé
+                    </h2>
+
+                    <p>
+                        Aucun serveur ne correspond à ta recherche
+                        pour le moment.
+                    </p>
+
+                    <a
+                        href="/servers"
+                        class="btn btn-secondary"
+                    >
+                        🔄 Réinitialiser
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         PAGINATION
+    ========================== -->
+
+    {% if pagination %}
+
+        <nav
+            class="pagination"
+            aria-label="Pagination"
+        >
+
+            {% if pagination.has_prev %}
+
+                <a
+                    href="?page={{ pagination.prev_num }}"
+                    class="pagination-button"
+                >
+                    ← Précédent
+                </a>
+
+            {% endif %}
+
+
+            {% for page in pagination.iter_pages() %}
+
+                {% if page %}
+
+                    {% if page == pagination.page %}
+
+                        <span class="pagination-button active">
+                            {{ page }}
+                        </span>
+
+                    {% else %}
+
+                        <a
+                            href="?page={{ page }}"
+                            class="pagination-button"
+                        >
+                            {{ page }}
+                        </a>
+
+                    {% endif %}
+
+                {% else %}
+
+                    <span class="pagination-separator">
+                        …
+                    </span>
+
+                {% endif %}
+
+            {% endfor %}
+
+
+            {% if pagination.has_next %}
+
+                <a
+                    href="?page={{ pagination.next_num }}"
+                    class="pagination-button"
+                >
+                    Suivant →
+                </a>
+
+            {% endif %}
+
+        </nav>
+
+    {% endif %}
+
+
+    <!-- =========================
+         CTA
+    ========================== -->
+
+    <section class="servers-cta">
+
+        <div class="servers-cta-content">
+
+            <span class="servers-cta-icon">
+                🚀
+            </span>
+
+            <div>
+
+                <h2>
+                    Tu possèdes un serveur Discord ?
+                </h2>
+
+                <p>
+                    Ajoute-le sur {{ config.SITE_NAME }} et
+                    commence à gagner des bumps.
+                </p>
+
+            </div>
+
+            <a
+                href="/add-bot"
+                class="btn btn-primary"
+            >
+                ➕ Ajouter mon serveur
+            </a>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}
