@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Connexion • {{ config.SITE_NAME }}
+{% endblock %}
+
+{% block description %}
+    Connecte-toi avec Discord pour accéder à ton espace personnel.
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/style.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<section class="auth-page">
+
+    <div class="auth-card">
+
+        <!-- Logo -->
+        <div class="auth-logo">
+            <div class="auth-logo-icon">
+                🚀
+            </div>
+
+            <h1>
+                Connexion
+            </h1>
+
+            <p>
+                Connecte ton compte Discord à
+                {{ config.SITE_NAME }}.
+            </p>
+        </div>
+
+
+        <!-- Discord -->
+        <div class="auth-content">
+
+            <a
+                href="{{ url_for('auth.login') }}"
+                class="discord-login-button"
+            >
+                <span class="discord-icon">
+                    💬
+                </span>
+
+                <span>
+                    Continuer avec Discord
+                </span>
+            </a>
+
+            <div class="auth-divider">
+                <span></span>
+                <p>Connexion sécurisée</p>
+                <span></span>
+            </div>
+
+
+            <div class="auth-info">
+
+                <div class="auth-info-item">
+
+                    <span class="auth-info-icon">
+                        🔐
+                    </span>
+
+                    <div>
+                        <strong>
+                            Sécurisé
+                        </strong>
+
+                        <p>
+                            Nous utilisons l'authentification
+                            officielle Discord OAuth2.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="auth-info-item">
+
+                    <span class="auth-info-icon">
+                        👤
+                    </span>
+
+                    <div>
+                        <strong>
+                            Ton compte
+                        </strong>
+
+                        <p>
+                            Ton mot de passe Discord ne nous
+                            est jamais transmis.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="auth-info-item">
+
+                    <span class="auth-info-icon">
+                        ⚡
+                    </span>
+
+                    <div>
+                        <strong>
+                            Rapide
+                        </strong>
+
+                        <p>
+                            Connecte-toi en quelques secondes.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Retour -->
+        <div class="auth-footer">
+
+            <a href="{{ url_for('home.index') }}">
+                ← Retour à l'accueil
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
