@@ -1,0 +1,607 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Bot Discord • Admin • {{ config.SITE_NAME }}
+{% endblock %}
+
+{% block description %}
+    Configuration du bot Discord de {{ config.SITE_NAME }}.
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/admin.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-page">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <section class="admin-header">
+
+        <div>
+
+            <span class="section-badge">
+                🤖 Discord
+            </span>
+
+            <h1>
+                Configuration du bot
+            </h1>
+
+            <p>
+                Configure le bot Discord utilisé par
+                {{ config.SITE_NAME }}.
+            </p>
+
+        </div>
+
+        <div class="admin-header-actions">
+
+            <a
+                href="{{ url_for('admin.dashboard') }}"
+                class="btn btn-secondary"
+            >
+                ← Dashboard
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         FLASH MESSAGES
+    ========================== -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            <div class="admin-flashes">
+
+                {% for category, message in messages %}
+
+                    <div class="admin-flash admin-flash-{{ category }}">
+
+                        {% if category == "success" %}
+                            ✅
+                        {% elif category == "error" %}
+                            ❌
+                        {% elif category == "warning" %}
+                            ⚠️
+                        {% else %}
+                            ℹ️
+                        {% endif %}
+
+                        <span>
+                            {{ message }}
+                        </span>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- =========================
+         BOT STATUS
+    ========================== -->
+
+    <section class="admin-settings-section">
+
+        <div class="admin-section-title">
+
+            <span class="section-badge">
+                📡 État
+            </span>
+
+            <h2>
+                État du bot
+            </h2>
+
+        </div>
+
+
+        <div class="admin-status-card">
+
+            <div class="admin-status-left">
+
+                <div class="admin-bot-avatar">
+                    🤖
+                </div>
+
+                <div>
+
+                    <h3>
+                        {{ bot.name if bot and bot.name else config.SITE_NAME + " Bot" }}
+                    </h3>
+
+                    {% if bot and bot.online %}
+
+                        <span class="status-online">
+                            🟢 En ligne
+                        </span>
+
+                    {% else %}
+
+                        <span class="status-offline">
+                            🔴 Hors ligne
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <div class="admin-bot-info">
+
+                {% if bot and bot.id %}
+
+                    <span>
+                        🆔 ID : <code>{{ bot.id }}</code>
+                    </span>
+
+                {% endif %}
+
+                {% if bot and bot.guilds is defined %}
+
+                    <span>
+                        🖥️ Serveurs : {{ bot.guilds }}
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         BOT CONFIGURATION
+    ========================== -->
+
+    <section class="admin-settings-section">
+
+        <div class="admin-section-title">
+
+            <span class="section-badge">
+                ⚙️ Configuration
+            </span>
+
+            <h2>
+                Paramètres du bot
+            </h2>
+
+            <p>
+                Les informations ci-dessous sont enregistrées
+                côté serveur.
+            </p>
+
+        </div>
+
+
+        <form
+            action="{{ url_for('admin.bot') }}"
+            method="POST"
+            class="admin-settings-form"
+        >
+
+            {% if csrf_token is defined %}
+
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="{{ csrf_token() }}"
+                >
+
+            {% endif %}
+
+
+            <!-- =========================
+                 TOKEN
+            ========================== -->
+
+            <div class="admin-form-group">
+
+                <label for="bot_token">
+                    🔑 Token du bot Discord
+                </label>
+
+                <div class="admin-input-wrapper">
+
+                    <span>
+                        🔐
+                    </span>
+
+                    <input
+                        type="password"
+                        id="bot_token"
+                        name="bot_token"
+                        value=""
+                        placeholder="Colle le token du bot ici"
+                        autocomplete="new-password"
+                    >
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        onclick="toggleBotToken()"
+                        aria-label="Afficher ou masquer le token"
+                    >
+                        👁️
+                    </button>
+
+                </div>
+
+                <small>
+                    🔒 Le token est une information secrète.
+                    Il ne doit jamais être affiché publiquement.
+                </small>
+
+            </div>
+
+
+            <!-- =========================
+                 CLIENT ID
+            ========================== -->
+
+            <div class="admin-form-group">
+
+                <label for="bot_client_id">
+                    🆔 ID du bot
+                </label>
+
+                <input
+                    type="text"
+                    id="bot_client_id"
+                    name="bot_client_id"
+                    value="{{ bot.client_id if bot and bot.client_id else '' }}"
+                    placeholder="123456789012345678"
+                    inputmode="numeric"
+                >
+
+                <small>
+                    L'ID de l'application Discord.
+                </small>
+
+            </div>
+
+
+            <!-- =========================
+                 INVITE URL
+            ========================== -->
+
+            <div class="admin-form-group">
+
+                <label for="bot_invite_url">
+                    🔗 Lien d'invitation du bot
+                </label>
+
+                <input
+                    type="url"
+                    id="bot_invite_url"
+                    name="bot_invite_url"
+                    value="{{ bot.invite_url if bot and bot.invite_url else config.DISCORD_BOT_INVITE_URL }}"
+                    placeholder="https://discord.com/oauth2/authorize?..."
+                >
+
+                <small>
+                    Ce lien sera utilisé par le bouton
+                    « Ajouter le bot » du site.
+                </small>
+
+            </div>
+
+
+            <!-- =========================
+                 SUPPORT SERVER
+            ========================== -->
+
+            <div class="admin-form-group">
+
+                <label for="bot_support_url">
+                    💬 Serveur Discord support
+                </label>
+
+                <input
+                    type="url"
+                    id="bot_support_url"
+                    name="bot_support_url"
+                    value="{{ bot.support_url if bot and bot.support_url else '' }}"
+                    placeholder="https://discord.gg/..."
+                >
+
+            </div>
+
+
+            <!-- =========================
+                 COMMAND PREFIX
+            ========================== -->
+
+            <div class="admin-form-group">
+
+                <label for="bot_prefix">
+                    ⚡ Préfixe des commandes
+                </label>
+
+                <input
+                    type="text"
+                    id="bot_prefix"
+                    name="bot_prefix"
+                    value="{{ bot.prefix if bot and bot.prefix else '!' }}"
+                    maxlength="10"
+                    placeholder="!"
+                >
+
+                <small>
+                    Exemple : <code>!</code> pour
+                    <code>!bump</code>.
+                </small>
+
+            </div>
+
+
+            <!-- =========================
+                 BOT ENABLED
+            ========================== -->
+
+            <div class="admin-setting-toggle">
+
+                <div>
+
+                    <strong>
+                        🤖 Bot activé
+                    </strong>
+
+                    <p>
+                        Autorise le site à utiliser la configuration
+                        du bot Discord.
+                    </p>
+
+                </div>
+
+                <label class="admin-switch">
+
+                    <input
+                        type="checkbox"
+                        name="bot_enabled"
+                        value="1"
+                        {% if not bot or bot.enabled %}
+                            checked
+                        {% endif %}
+                    >
+
+                    <span></span>
+
+                </label>
+
+            </div>
+
+
+            <!-- =========================
+                 AUTO START
+            ========================== -->
+
+            <div class="admin-setting-toggle">
+
+                <div>
+
+                    <strong>
+                        🔄 Démarrage automatique
+                    </strong>
+
+                    <p>
+                        Lance automatiquement le bot avec
+                        l'application lorsque cela est configuré.
+                    </p>
+
+                </div>
+
+                <label class="admin-switch">
+
+                    <input
+                        type="checkbox"
+                        name="bot_auto_start"
+                        value="1"
+                        {% if bot and bot.auto_start %}
+                            checked
+                        {% endif %}
+                    >
+
+                    <span></span>
+
+                </label>
+
+            </div>
+
+
+            <!-- =========================
+                 SAVE
+            ========================== -->
+
+            <div class="admin-form-actions">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    💾 Enregistrer le bot
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+    <!-- =========================
+         SECURITY
+    ========================== -->
+
+    <section class="admin-security-card">
+
+        <div class="admin-security-row">
+
+            <div>
+
+                <strong>
+                    🛡️ Sécurité du token
+                </strong>
+
+                <p>
+                    Le token doit rester uniquement côté serveur.
+                    Ne le publie jamais sur GitHub et ne l'envoie
+                    jamais dans le JavaScript du navigateur.
+                </p>
+
+            </div>
+
+            <span class="status-online">
+                🔒 Privé
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         INVITE PREVIEW
+    ========================== -->
+
+    <section class="admin-settings-section">
+
+        <div class="admin-section-title">
+
+            <span class="section-badge">
+                🔗 Invitation
+            </span>
+
+            <h2>
+                Aperçu du lien
+            </h2>
+
+        </div>
+
+
+        <div class="admin-invite-preview">
+
+            <div class="admin-invite-icon">
+                🤖
+            </div>
+
+            <div class="admin-invite-content">
+
+                <strong>
+                    Ajouter {{ bot.name if bot and bot.name else "le bot" }}
+                </strong>
+
+                <p>
+                    Utilise le lien configuré ci-dessus pour
+                    inviter le bot sur un serveur Discord.
+                </p>
+
+            </div>
+
+
+            <a
+                href="{{ config.DISCORD_BOT_INVITE_URL or '#' }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn btn-primary"
+                id="invitePreviewButton"
+            >
+                ➕ Ajouter le bot
+            </a>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script>
+
+function toggleBotToken() {
+
+    const input = document.getElementById("bot_token");
+
+    if (!input) {
+        return;
+    }
+
+    if (input.type === "password") {
+
+        input.type = "text";
+
+    } else {
+
+        input.type = "password";
+
+    }
+
+}
+
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const inviteInput = document.getElementById(
+        "bot_invite_url"
+    );
+
+    const inviteButton = document.getElementById(
+        "invitePreviewButton"
+    );
+
+
+    if (!inviteInput || !inviteButton) {
+        return;
+    }
+
+
+    inviteInput.addEventListener(
+        "input",
+        function () {
+
+            const value = inviteInput.value.trim();
+
+            if (value) {
+
+                inviteButton.href = value;
+
+            } else {
+
+                inviteButton.href = "#";
+
+            }
+
+        }
+    );
+
+});
+
+</script>
+
+{% endblock %}
