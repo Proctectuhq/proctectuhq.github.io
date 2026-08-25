@@ -903,3 +903,28 @@
     }
 
 }
+/* =========================================================
+   HOME JS ANIMATIONS
+   ========================================================= */
+
+.home-animate {
+    opacity: 0;
+    transform: translateY(15px);
+
+    transition:
+        opacity .5s ease,
+        transform .5s ease;
+}
+
+.home-animate.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+.input-error {
+    border-color: #ed4245 !important;
+
+    box-shadow:
+        0 0 0 3px rgba(237, 66, 69, .12) !important;
+}
