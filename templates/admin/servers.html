@@ -1,0 +1,673 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Serveurs • Admin • {{ config.SITE_NAME }}
+{% endblock %}
+
+{% block description %}
+    Gestion des serveurs Discord de {{ config.SITE_NAME }}.
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/admin.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-page">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <section class="admin-header">
+
+        <div>
+
+            <span class="section-badge">
+                🖥️ Serveurs
+            </span>
+
+            <h1>
+                Gestion des serveurs
+            </h1>
+
+            <p>
+                Consulte et gère les serveurs Discord présents
+                sur {{ config.SITE_NAME }}.
+            </p>
+
+        </div>
+
+        <div class="admin-header-actions">
+
+            <a
+                href="{{ url_for('admin.dashboard') }}"
+                class="btn btn-secondary"
+            >
+                ← Dashboard
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         STATISTIQUES
+    ========================== -->
+
+    <section class="admin-stats">
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon">
+                🖥️
+            </div>
+
+            <div>
+
+                <span>
+                    Total
+                </span>
+
+                <strong>
+                    {{ stats.servers if stats else servers|length }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon">
+                🟢
+            </div>
+
+            <div>
+
+                <span>
+                    Actifs
+                </span>
+
+                <strong>
+                    {{ stats.active_servers if stats else 0 }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon">
+                🚀
+            </div>
+
+            <div>
+
+                <span>
+                    Bumps
+                </span>
+
+                <strong>
+                    {{ stats.bumps if stats else 0 }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon">
+                👥
+            </div>
+
+            <div>
+
+                <span>
+                    Membres
+                </span>
+
+                <strong>
+                    {{ stats.members if stats else 0 }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         RECHERCHE
+    ========================== -->
+
+    <section class="admin-search-section">
+
+        <form
+            action="{{ url_for('admin.servers') }}"
+            method="GET"
+            class="admin-search-form"
+        >
+
+            <div class="admin-search-input">
+
+                <span>
+                    🔎
+                </span>
+
+                <input
+                    type="text"
+                    name="q"
+                    value="{{ request.args.get('q', '') }}"
+                    placeholder="Rechercher un serveur ou un ID..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <select
+                name="status"
+                onchange="this.form.submit()"
+            >
+
+                <option
+                    value=""
+                    {% if not request.args.get('status') %}
+                        selected
+                    {% endif %}
+                >
+                    📋 Tous les serveurs
+                </option>
+
+                <option
+                    value="active"
+                    {% if request.args.get('status') == 'active' %}
+                        selected
+                    {% endif %}
+                >
+                    🟢 Actifs
+                </option>
+
+                <option
+                    value="inactive"
+                    {% if request.args.get('status') == 'inactive' %}
+                        selected
+                    {% endif %}
+                >
+                    🔴 Inactifs
+                </option>
+
+                <option
+                    value="verified"
+                    {% if request.args.get('status') == 'verified' %}
+                        selected
+                    {% endif %}
+                >
+                    ✅ Vérifiés
+                </option>
+
+            </select>
+
+
+            <select
+                name="sort"
+                onchange="this.form.submit()"
+            >
+
+                <option
+                    value="newest"
+                    {% if request.args.get('sort', 'newest') == 'newest' %}
+                        selected
+                    {% endif %}
+                >
+                    🆕 Plus récents
+                </option>
+
+                <option
+                    value="members"
+                    {% if request.args.get('sort') == 'members' %}
+                        selected
+                    {% endif %}
+                >
+                    👥 Plus de membres
+                </option>
+
+                <option
+                    value="bumps"
+                    {% if request.args.get('sort') == 'bumps' %}
+                        selected
+                    {% endif %}
+                >
+                    🚀 Plus de bumps
+                </option>
+
+            </select>
+
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+            >
+                🔎 Rechercher
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- =========================
+         SERVERS TABLE
+    ========================== -->
+
+    <section class="admin-table-section">
+
+        <div class="admin-section-title">
+
+            <div>
+
+                <span class="section-badge">
+                    📋 Liste
+                </span>
+
+                <h2>
+                    Serveurs Discord
+                </h2>
+
+            </div>
+
+            <span class="admin-result-count">
+                {{ servers|length if servers else 0 }} serveur(s)
+            </span>
+
+        </div>
+
+
+        {% if servers %}
+
+            <div class="admin-table-container">
+
+                <table class="admin-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Serveur
+                            </th>
+
+                            <th>
+                                ID
+                            </th>
+
+                            <th>
+                                Membres
+                            </th>
+
+                            <th>
+                                Bumps
+                            </th>
+
+                            <th>
+                                Catégorie
+                            </th>
+
+                            <th>
+                                Statut
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for server in servers %}
+
+                            <tr>
+
+                                <!-- Server -->
+
+                                <td>
+
+                                    <div class="admin-server-cell">
+
+                                        {% if server.icon %}
+
+                                            <img
+                                                src="{{ server.icon }}"
+                                                alt="{{ server.name }}"
+                                                class="admin-server-icon"
+                                                loading="lazy"
+                                            >
+
+                                        {% else %}
+
+                                            <div class="admin-server-icon-placeholder">
+                                                🖥️
+                                            </div>
+
+                                        {% endif %}
+
+
+                                        <div>
+
+                                            <strong>
+                                                {{ server.name or "Serveur sans nom" }}
+                                            </strong>
+
+                                            {% if server.verified %}
+
+                                                <span class="verified-badge">
+                                                    ✓
+                                                </span>
+
+                                            {% endif %}
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- ID -->
+
+                                <td>
+
+                                    <code>
+                                        {{ server.guild_id or server.id }}
+                                    </code>
+
+                                </td>
+
+
+                                <!-- Members -->
+
+                                <td>
+
+                                    <span class="admin-table-stat">
+                                        👥
+                                        {{ server.members or 0 }}
+                                    </span>
+
+                                </td>
+
+
+                                <!-- Bumps -->
+
+                                <td>
+
+                                    <span class="admin-table-stat">
+                                        🚀
+                                        {{ server.bump_count or 0 }}
+                                    </span>
+
+                                </td>
+
+
+                                <!-- Category -->
+
+                                <td>
+
+                                    {% if server.category %}
+
+                                        <span class="bump-category">
+                                            📂 {{ server.category }}
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="admin-muted">
+                                            Non définie
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Status -->
+
+                                <td>
+
+                                    {% if server.active %}
+
+                                        <span class="status-online">
+                                            🟢 Actif
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="status-offline">
+                                            🔴 Inactif
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Actions -->
+
+                                <td>
+
+                                    <div class="admin-table-actions">
+
+                                        <a
+                                            href="/server/{{ server.guild_id or server.id }}"
+                                            target="_blank"
+                                            class="admin-action-button"
+                                            title="Voir le serveur"
+                                        >
+                                            👁️
+                                        </a>
+
+
+                                        <a
+                                            href="/admin/servers/{{ server.guild_id or server.id }}"
+                                            class="admin-action-button"
+                                            title="Gérer le serveur"
+                                        >
+                                            ⚙️
+                                        </a>
+
+
+                                        {% if server.active %}
+
+                                            <form
+                                                action="/admin/servers/{{ server.guild_id or server.id }}/disable"
+                                                method="POST"
+                                                onsubmit="return confirm('Désactiver ce serveur ?');"
+                                            >
+
+                                                {% if csrf_token is defined %}
+
+                                                    <input
+                                                        type="hidden"
+                                                        name="csrf_token"
+                                                        value="{{ csrf_token() }}"
+                                                    >
+
+                                                {% endif %}
+
+                                                <button
+                                                    type="submit"
+                                                    class="admin-action-button danger"
+                                                    title="Désactiver"
+                                                >
+                                                    🚫
+                                                </button>
+
+                                            </form>
+
+                                        {% else %}
+
+                                            <form
+                                                action="/admin/servers/{{ server.guild_id or server.id }}/enable"
+                                                method="POST"
+                                            >
+
+                                                {% if csrf_token is defined %}
+
+                                                    <input
+                                                        type="hidden"
+                                                        name="csrf_token"
+                                                        value="{{ csrf_token() }}"
+                                                    >
+
+                                                {% endif %}
+
+                                                <button
+                                                    type="submit"
+                                                    class="admin-action-button success"
+                                                    title="Activer"
+                                                >
+                                                    🟢
+                                                </button>
+
+                                            </form>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+        {% else %}
+
+            <!-- =========================
+                 EMPTY
+            ========================== -->
+
+            <div class="admin-empty">
+
+                <div class="admin-empty-icon">
+                    🖥️
+                </div>
+
+                <h3>
+                    Aucun serveur
+                </h3>
+
+                <p>
+                    Aucun serveur Discord ne correspond
+                    à ta recherche.
+                </p>
+
+                <a
+                    href="{{ url_for('admin.servers') }}"
+                    class="btn btn-secondary"
+                >
+                    🔄 Réinitialiser
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- =========================
+         PAGINATION
+    ========================== -->
+
+    {% if pagination %}
+
+        <nav
+            class="pagination"
+            aria-label="Pagination des serveurs"
+        >
+
+            {% if pagination.has_prev %}
+
+                <a
+                    href="?page={{ pagination.prev_num }}&q={{ request.args.get('q', '') }}&status={{ request.args.get('status', '') }}&sort={{ request.args.get('sort', 'newest') }}"
+                    class="pagination-button"
+                >
+                    ← Précédent
+                </a>
+
+            {% endif %}
+
+
+            {% for page in pagination.iter_pages() %}
+
+                {% if page %}
+
+                    {% if page == pagination.page %}
+
+                        <span class="pagination-button active">
+                            {{ page }}
+                        </span>
+
+                    {% else %}
+
+                        <a
+                            href="?page={{ page }}&q={{ request.args.get('q', '') }}&status={{ request.args.get('status', '') }}&sort={{ request.args.get('sort', 'newest') }}"
+                            class="pagination-button"
+                        >
+                            {{ page }}
+                        </a>
+
+                    {% endif %}
+
+                {% else %}
+
+                    <span class="pagination-separator">
+                        …
+                    </span>
+
+                {% endif %}
+
+            {% endfor %}
+
+
+            {% if pagination.has_next %}
+
+                <a
+                    href="?page={{ pagination.next_num }}&q={{ request.args.get('q', '') }}&status={{ request.args.get('status', '') }}&sort={{ request.args.get('sort', 'newest') }}"
+                    class="pagination-button"
+                >
+                    Suivant →
+                </a>
+
+            {% endif %}
+
+        </nav>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
