@@ -1,0 +1,604 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Utilisateurs • Admin • {{ config.SITE_NAME }}
+{% endblock %}
+
+{% block description %}
+    Gestion des utilisateurs de {{ config.SITE_NAME }}.
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/admin.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-page">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <section class="admin-header">
+
+        <div>
+
+            <span class="section-badge">
+                👥 Utilisateurs
+            </span>
+
+            <h1>
+                Gestion des utilisateurs
+            </h1>
+
+            <p>
+                Consulte les utilisateurs connectés à
+                {{ config.SITE_NAME }}.
+            </p>
+
+        </div>
+
+        <div class="admin-header-actions">
+
+            <a
+                href="{{ url_for('admin.dashboard') }}"
+                class="btn btn-secondary"
+            >
+                ← Dashboard
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         STATISTIQUES
+    ========================== -->
+
+    <section class="admin-stats">
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon">
+                👥
+            </div>
+
+            <div>
+
+                <span>
+                    Total
+                </span>
+
+                <strong>
+                    {{ stats.users if stats else users|length }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon">
+                🟢
+            </div>
+
+            <div>
+
+                <span>
+                    Actifs
+                </span>
+
+                <strong>
+                    {{ stats.active_users if stats else 0 }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon">
+                🖥️
+            </div>
+
+            <div>
+
+                <span>
+                    Serveurs
+                </span>
+
+                <strong>
+                    {{ stats.servers if stats else 0 }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon">
+                🚀
+            </div>
+
+            <div>
+
+                <span>
+                    Bumps
+                </span>
+
+                <strong>
+                    {{ stats.bumps if stats else 0 }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         RECHERCHE
+    ========================== -->
+
+    <section class="admin-search-section">
+
+        <form
+            action="{{ url_for('admin.users') }}"
+            method="GET"
+            class="admin-search-form"
+        >
+
+            <div class="admin-search-input">
+
+                <span>
+                    🔎
+                </span>
+
+                <input
+                    type="text"
+                    name="q"
+                    value="{{ request.args.get('q', '') }}"
+                    placeholder="Rechercher par pseudo ou ID Discord..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <select
+                name="sort"
+                onchange="this.form.submit()"
+            >
+
+                <option
+                    value="newest"
+                    {% if request.args.get('sort', 'newest') == 'newest' %}
+                        selected
+                    {% endif %}
+                >
+                    🆕 Plus récents
+                </option>
+
+                <option
+                    value="oldest"
+                    {% if request.args.get('sort') == 'oldest' %}
+                        selected
+                    {% endif %}
+                >
+                    📅 Plus anciens
+                </option>
+
+                <option
+                    value="bumps"
+                    {% if request.args.get('sort') == 'bumps' %}
+                        selected
+                    {% endif %}
+                >
+                    🚀 Plus de bumps
+                </option>
+
+            </select>
+
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+            >
+                🔎 Rechercher
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- =========================
+         USERS TABLE
+    ========================== -->
+
+    <section class="admin-table-section">
+
+        <div class="admin-section-title">
+
+            <div>
+
+                <span class="section-badge">
+                    📋 Liste
+                </span>
+
+                <h2>
+                    Utilisateurs
+                </h2>
+
+            </div>
+
+            <span class="admin-result-count">
+                {{ users|length if users else 0 }} résultat(s)
+            </span>
+
+        </div>
+
+
+        {% if users %}
+
+            <div class="admin-table-container">
+
+                <table class="admin-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Utilisateur
+                            </th>
+
+                            <th>
+                                ID Discord
+                            </th>
+
+                            <th>
+                                Serveurs
+                            </th>
+
+                            <th>
+                                Bumps
+                            </th>
+
+                            <th>
+                                Connexion
+                            </th>
+
+                            <th>
+                                Statut
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for user in users %}
+
+                            <tr>
+
+                                <!-- User -->
+
+                                <td>
+
+                                    <div class="admin-user-cell">
+
+                                        {% if user.avatar %}
+
+                                            <img
+                                                src="{{ user.avatar }}"
+                                                alt="{{ user.username }}"
+                                                class="admin-user-avatar"
+                                                loading="lazy"
+                                            >
+
+                                        {% else %}
+
+                                            <div class="admin-user-avatar-placeholder">
+                                                👤
+                                            </div>
+
+                                        {% endif %}
+
+
+                                        <div>
+
+                                            <strong>
+                                                {{ user.global_name or user.username or "Utilisateur" }}
+                                            </strong>
+
+                                            <span>
+                                                @{{ user.username or "unknown" }}
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- Discord ID -->
+
+                                <td>
+
+                                    <code>
+                                        {{ user.id }}
+                                    </code>
+
+                                </td>
+
+
+                                <!-- Servers -->
+
+                                <td>
+
+                                    <span class="admin-table-stat">
+                                        🖥️
+                                        {{ user.server_count or 0 }}
+                                    </span>
+
+                                </td>
+
+
+                                <!-- Bumps -->
+
+                                <td>
+
+                                    <span class="admin-table-stat">
+                                        🚀
+                                        {{ user.bump_count or 0 }}
+                                    </span>
+
+                                </td>
+
+
+                                <!-- Login -->
+
+                                <td>
+
+                                    <span class="admin-date">
+                                        {{ user.last_login or "Jamais" }}
+                                    </span>
+
+                                </td>
+
+
+                                <!-- Status -->
+
+                                <td>
+
+                                    {% if user.banned %}
+
+                                        <span class="status-offline">
+                                            🔴 Banni
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="status-online">
+                                            🟢 Actif
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Actions -->
+
+                                <td>
+
+                                    <div class="admin-table-actions">
+
+                                        <a
+                                            href="/admin/users/{{ user.id }}"
+                                            class="admin-action-button"
+                                            title="Voir le profil"
+                                        >
+                                            👁️
+                                        </a>
+
+
+                                        {% if user.banned %}
+
+                                            <form
+                                                action="/admin/users/{{ user.id }}/unban"
+                                                method="POST"
+                                            >
+
+                                                {% if csrf_token is defined %}
+
+                                                    <input
+                                                        type="hidden"
+                                                        name="csrf_token"
+                                                        value="{{ csrf_token() }}"
+                                                    >
+
+                                                {% endif %}
+
+                                                <button
+                                                    type="submit"
+                                                    class="admin-action-button success"
+                                                    title="Débannir"
+                                                >
+                                                    🔓
+                                                </button>
+
+                                            </form>
+
+                                        {% else %}
+
+                                            <form
+                                                action="/admin/users/{{ user.id }}/ban"
+                                                method="POST"
+                                                onsubmit="return confirm('Bannir cet utilisateur ?');"
+                                            >
+
+                                                {% if csrf_token is defined %}
+
+                                                    <input
+                                                        type="hidden"
+                                                        name="csrf_token"
+                                                        value="{{ csrf_token() }}"
+                                                    >
+
+                                                {% endif %}
+
+                                                <button
+                                                    type="submit"
+                                                    class="admin-action-button danger"
+                                                    title="Bannir"
+                                                >
+                                                    🚫
+                                                </button>
+
+                                            </form>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+        {% else %}
+
+            <!-- =========================
+                 EMPTY
+            ========================== -->
+
+            <div class="admin-empty">
+
+                <div class="admin-empty-icon">
+                    👥
+                </div>
+
+                <h3>
+                    Aucun utilisateur
+                </h3>
+
+                <p>
+                    Aucun utilisateur ne correspond à ta recherche.
+                </p>
+
+                <a
+                    href="{{ url_for('admin.users') }}"
+                    class="btn btn-secondary"
+                >
+                    🔄 Réinitialiser
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- =========================
+         PAGINATION
+    ========================== -->
+
+    {% if pagination %}
+
+        <nav
+            class="pagination"
+            aria-label="Pagination des utilisateurs"
+        >
+
+            {% if pagination.has_prev %}
+
+                <a
+                    href="?page={{ pagination.prev_num }}&q={{ request.args.get('q', '') }}&sort={{ request.args.get('sort', 'newest') }}"
+                    class="pagination-button"
+                >
+                    ← Précédent
+                </a>
+
+            {% endif %}
+
+
+            {% for page in pagination.iter_pages() %}
+
+                {% if page %}
+
+                    {% if page == pagination.page %}
+
+                        <span class="pagination-button active">
+                            {{ page }}
+                        </span>
+
+                    {% else %}
+
+                        <a
+                            href="?page={{ page }}&q={{ request.args.get('q', '') }}&sort={{ request.args.get('sort', 'newest') }}"
+                            class="pagination-button"
+                        >
+                            {{ page }}
+                        </a>
+
+                    {% endif %}
+
+                {% else %}
+
+                    <span class="pagination-separator">
+                        …
+                    </span>
+
+                {% endif %}
+
+            {% endfor %}
+
+
+            {% if pagination.has_next %}
+
+                <a
+                    href="?page={{ pagination.next_num }}&q={{ request.args.get('q', '') }}&sort={{ request.args.get('sort', 'newest') }}"
+                    class="pagination-button"
+                >
+                    Suivant →
+                </a>
+
+            {% endif %}
+
+        </nav>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
