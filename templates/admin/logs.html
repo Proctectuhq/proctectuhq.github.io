@@ -1,0 +1,559 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Logs • Admin • {{ config.SITE_NAME }}
+{% endblock %}
+
+{% block description %}
+    Consulte les logs administratifs de {{ config.SITE_NAME }}.
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/admin.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-page">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <section class="admin-header">
+
+        <div>
+
+            <span class="section-badge">
+                📜 Logs
+            </span>
+
+            <h1>
+                Journaux d'activité
+            </h1>
+
+            <p>
+                Consulte les actions et événements récents
+                de l'administration.
+            </p>
+
+        </div>
+
+        <div class="admin-header-actions">
+
+            <a
+                href="{{ url_for('admin.dashboard') }}"
+                class="btn btn-secondary"
+            >
+                ← Dashboard
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         STATISTICS
+    ========================== -->
+
+    <section class="admin-stats">
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon">
+                📜
+            </div>
+
+            <div>
+
+                <span>
+                    Total logs
+                </span>
+
+                <strong>
+                    {{ stats.logs if stats else logs|length }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon">
+                ✅
+            </div>
+
+            <div>
+
+                <span>
+                    Succès
+                </span>
+
+                <strong>
+                    {{ stats.success_logs if stats else 0 }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon">
+                ⚠️
+            </div>
+
+            <div>
+
+                <span>
+                    Alertes
+                </span>
+
+                <strong>
+                    {{ stats.warning_logs if stats else 0 }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon">
+                ❌
+            </div>
+
+            <div>
+
+                <span>
+                    Erreurs
+                </span>
+
+                <strong>
+                    {{ stats.error_logs if stats else 0 }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         FILTERS
+    ========================== -->
+
+    <section class="admin-search-section">
+
+        <form
+            action="{{ url_for('admin.logs') }}"
+            method="GET"
+            class="admin-search-form"
+        >
+
+            <div class="admin-search-input">
+
+                <span>
+                    🔎
+                </span>
+
+                <input
+                    type="text"
+                    name="q"
+                    value="{{ request.args.get('q', '') }}"
+                    placeholder="Rechercher dans les logs..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <select
+                name="type"
+                onchange="this.form.submit()"
+            >
+
+                <option
+                    value=""
+                    {% if not request.args.get('type') %}
+                        selected
+                    {% endif %}
+                >
+                    📋 Tous les types
+                </option>
+
+                <option
+                    value="success"
+                    {% if request.args.get('type') == 'success' %}
+                        selected
+                    {% endif %}
+                >
+                    ✅ Succès
+                </option>
+
+                <option
+                    value="info"
+                    {% if request.args.get('type') == 'info' %}
+                        selected
+                    {% endif %}
+                >
+                    ℹ️ Information
+                </option>
+
+                <option
+                    value="warning"
+                    {% if request.args.get('type') == 'warning' %}
+                        selected
+                    {% endif %}
+                >
+                    ⚠️ Avertissement
+                </option>
+
+                <option
+                    value="error"
+                    {% if request.args.get('type') == 'error' %}
+                        selected
+                    {% endif %}
+                >
+                    ❌ Erreur
+                </option>
+
+            </select>
+
+
+            <select
+                name="sort"
+                onchange="this.form.submit()"
+            >
+
+                <option
+                    value="newest"
+                    {% if request.args.get('sort', 'newest') == 'newest' %}
+                        selected
+                    {% endif %}
+                >
+                    🆕 Plus récents
+                </option>
+
+                <option
+                    value="oldest"
+                    {% if request.args.get('sort') == 'oldest' %}
+                        selected
+                    {% endif %}
+                >
+                    📅 Plus anciens
+                </option>
+
+            </select>
+
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+            >
+                🔎 Rechercher
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- =========================
+         LOGS
+    ========================== -->
+
+    <section class="admin-table-section">
+
+        <div class="admin-section-title">
+
+            <div>
+
+                <span class="section-badge">
+                    📋 Historique
+                </span>
+
+                <h2>
+                    Activité récente
+                </h2>
+
+            </div>
+
+            <span class="admin-result-count">
+                {{ logs|length if logs else 0 }} log(s)
+            </span>
+
+        </div>
+
+
+        {% if logs %}
+
+            <div class="admin-logs">
+
+                {% for log in logs %}
+
+                    <div
+                        class="admin-log-row"
+                        data-log-id="{{ log.id }}"
+                    >
+
+                        <!-- Icon -->
+
+                        <div class="admin-log-icon">
+
+                            {% if log.type == "success" %}
+
+                                <span>
+                                    ✅
+                                </span>
+
+                            {% elif log.type == "warning" %}
+
+                                <span>
+                                    ⚠️
+                                </span>
+
+                            {% elif log.type == "error" %}
+
+                                <span>
+                                    ❌
+                                </span>
+
+                            {% else %}
+
+                                <span>
+                                    ℹ️
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Content -->
+
+                        <div class="admin-log-content">
+
+                            <div class="admin-log-title">
+
+                                <strong>
+                                    {{ log.action or "Action" }}
+                                </strong>
+
+                                {% if log.type %}
+
+                                    <span
+                                        class="admin-log-type admin-log-type-{{ log.type }}"
+                                    >
+                                        {{ log.type|upper }}
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            {% if log.message %}
+
+                                <p>
+                                    {{ log.message }}
+                                </p>
+
+                            {% endif %}
+
+
+                            <div class="admin-log-meta">
+
+                                {% if log.username %}
+
+                                    <span>
+                                        👤 {{ log.username }}
+                                    </span>
+
+                                {% endif %}
+
+
+                                {% if log.user_id %}
+
+                                    <span>
+                                        🆔 {{ log.user_id }}
+                                    </span>
+
+                                {% endif %}
+
+
+                                {% if log.ip %}
+
+                                    <span>
+                                        🌐 {{ log.ip }}
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Date -->
+
+                        <time class="admin-log-date">
+
+                            {{ log.created_at or "—" }}
+
+                        </time>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+        {% else %}
+
+            <!-- =========================
+                 EMPTY
+            ========================== -->
+
+            <div class="admin-empty">
+
+                <div class="admin-empty-icon">
+                    📜
+                </div>
+
+                <h3>
+                    Aucun log
+                </h3>
+
+                <p>
+                    Aucun événement ne correspond aux filtres
+                    sélectionnés.
+                </p>
+
+                <a
+                    href="{{ url_for('admin.logs') }}"
+                    class="btn btn-secondary"
+                >
+                    🔄 Réinitialiser
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- =========================
+         PAGINATION
+    ========================== -->
+
+    {% if pagination %}
+
+        <nav
+            class="pagination"
+            aria-label="Pagination des logs"
+        >
+
+            {% if pagination.has_prev %}
+
+                <a
+                    href="?page={{ pagination.prev_num }}&q={{ request.args.get('q', '') }}&type={{ request.args.get('type', '') }}&sort={{ request.args.get('sort', 'newest') }}"
+                    class="pagination-button"
+                >
+                    ← Précédent
+                </a>
+
+            {% endif %}
+
+
+            {% for page in pagination.iter_pages() %}
+
+                {% if page %}
+
+                    {% if page == pagination.page %}
+
+                        <span class="pagination-button active">
+                            {{ page }}
+                        </span>
+
+                    {% else %}
+
+                        <a
+                            href="?page={{ page }}&q={{ request.args.get('q', '') }}&type={{ request.args.get('type', '') }}&sort={{ request.args.get('sort', 'newest') }}"
+                            class="pagination-button"
+                        >
+                            {{ page }}
+                        </a>
+
+                    {% endif %}
+
+                {% else %}
+
+                    <span class="pagination-separator">
+                        …
+                    </span>
+
+                {% endif %}
+
+            {% endfor %}
+
+
+            {% if pagination.has_next %}
+
+                <a
+                    href="?page={{ pagination.next_num }}&q={{ request.args.get('q', '') }}&type={{ request.args.get('type', '') }}&sort={{ request.args.get('sort', 'newest') }}"
+                    class="pagination-button"
+                >
+                    Suivant →
+                </a>
+
+            {% endif %}
+
+        </nav>
+
+    {% endif %}
+
+
+    <!-- =========================
+         LOG SECURITY INFO
+    ========================== -->
+
+    <section class="admin-security-card">
+
+        <div class="admin-security-row">
+
+            <div>
+
+                <strong>
+                    🛡️ Protection des logs
+                </strong>
+
+                <p>
+                    Les logs permettent de suivre les actions
+                    effectuées sur le panneau d'administration.
+                </p>
+
+            </div>
+
+            <span class="status-online">
+                🟢 Actif
+            </span>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}
