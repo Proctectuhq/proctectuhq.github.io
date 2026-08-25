@@ -1,0 +1,566 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Paramètres • Admin • {{ config.SITE_NAME }}
+{% endblock %}
+
+{% block description %}
+    Gestion des paramètres de {{ config.SITE_NAME }}.
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/admin.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-page">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <section class="admin-header">
+
+        <div>
+
+            <span class="section-badge">
+                ⚙️ Configuration
+            </span>
+
+            <h1>
+                Paramètres du site
+            </h1>
+
+            <p>
+                Configure les informations générales de
+                {{ config.SITE_NAME }}.
+            </p>
+
+        </div>
+
+        <div class="admin-header-actions">
+
+            <a
+                href="{{ url_for('admin.dashboard') }}"
+                class="btn btn-secondary"
+            >
+                ← Dashboard
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         FLASH MESSAGES
+    ========================== -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            <div class="admin-flashes">
+
+                {% for category, message in messages %}
+
+                    <div class="admin-flash admin-flash-{{ category }}">
+
+                        {% if category == "success" %}
+                            ✅
+                        {% elif category == "error" %}
+                            ❌
+                        {% elif category == "warning" %}
+                            ⚠️
+                        {% else %}
+                            ℹ️
+                        {% endif %}
+
+                        <span>
+                            {{ message }}
+                        </span>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- =========================
+         SITE SETTINGS
+    ========================== -->
+
+    <section class="admin-settings-section">
+
+        <div class="admin-section-title">
+
+            <span class="section-badge">
+                🌐 Site
+            </span>
+
+            <h2>
+                Informations générales
+            </h2>
+
+            <p>
+                Ces informations sont utilisées sur le site.
+            </p>
+
+        </div>
+
+
+        <form
+            action="{{ url_for('admin.settings') }}"
+            method="POST"
+            class="admin-settings-form"
+        >
+
+            {% if csrf_token is defined %}
+
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="{{ csrf_token() }}"
+                >
+
+            {% endif %}
+
+
+            <!-- Site name -->
+
+            <div class="admin-form-group">
+
+                <label for="site_name">
+                    🏷️ Nom du site
+                </label>
+
+                <input
+                    type="text"
+                    id="site_name"
+                    name="site_name"
+                    value="{{ settings.site_name if settings else config.SITE_NAME }}"
+                    placeholder="Nom de ton site"
+                    maxlength="100"
+                    required
+                >
+
+                <small>
+                    Le nom affiché dans le site et les pages.
+                </small>
+
+            </div>
+
+
+            <!-- Site description -->
+
+            <div class="admin-form-group">
+
+                <label for="site_description">
+                    📝 Description
+                </label>
+
+                <textarea
+                    id="site_description"
+                    name="site_description"
+                    rows="4"
+                    maxlength="500"
+                    placeholder="Description de ton site..."
+                >{{ settings.site_description if settings else "" }}</textarea>
+
+                <small>
+                    Description générale du site.
+                </small>
+
+            </div>
+
+
+            <!-- Site URL -->
+
+            <div class="admin-form-group">
+
+                <label for="site_url">
+                    🔗 URL du site
+                </label>
+
+                <input
+                    type="url"
+                    id="site_url"
+                    name="site_url"
+                    value="{{ settings.site_url if settings else '' }}"
+                    placeholder="https://example.com"
+                >
+
+            </div>
+
+
+            <!-- Discord -->
+
+            <div class="admin-form-group">
+
+                <label for="discord_server_url">
+                    💬 Serveur Discord support
+                </label>
+
+                <input
+                    type="url"
+                    id="discord_server_url"
+                    name="discord_server_url"
+                    value="{{ settings.discord_server_url if settings else '' }}"
+                    placeholder="https://discord.gg/..."
+                >
+
+            </div>
+
+
+            <!-- Maintenance -->
+
+            <div class="admin-setting-toggle">
+
+                <div>
+
+                    <strong>
+                        🔧 Mode maintenance
+                    </strong>
+
+                    <p>
+                        Empêche les utilisateurs d'accéder
+                        au site pendant une maintenance.
+                    </p>
+
+                </div>
+
+                <label class="admin-switch">
+
+                    <input
+                        type="checkbox"
+                        name="maintenance_mode"
+                        value="1"
+                        {% if settings and settings.maintenance_mode %}
+                            checked
+                        {% endif %}
+                    >
+
+                    <span></span>
+
+                </label>
+
+            </div>
+
+
+            <!-- Save -->
+
+            <div class="admin-form-actions">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    💾 Enregistrer les paramètres
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+    <!-- =========================
+         BUMP SETTINGS
+    ========================== -->
+
+    <section class="admin-settings-section">
+
+        <div class="admin-section-title">
+
+            <span class="section-badge">
+                🚀 Bumps
+            </span>
+
+            <h2>
+                Configuration des bumps
+            </h2>
+
+            <p>
+                Configure le fonctionnement général des bumps.
+            </p>
+
+        </div>
+
+
+        <form
+            action="{{ url_for('admin.settings') }}"
+            method="POST"
+            class="admin-settings-form"
+        >
+
+            {% if csrf_token is defined %}
+
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="{{ csrf_token() }}"
+                >
+
+            {% endif %}
+
+            <input
+                type="hidden"
+                name="settings_section"
+                value="bumps"
+            >
+
+
+            <!-- Cooldown -->
+
+            <div class="admin-form-group">
+
+                <label for="bump_cooldown">
+                    ⏱️ Cooldown entre les bumps
+                </label>
+
+                <div class="admin-input-with-suffix">
+
+                    <input
+                        type="number"
+                        id="bump_cooldown"
+                        name="bump_cooldown"
+                        value="{{ settings.bump_cooldown if settings else 7200 }}"
+                        min="60"
+                        max="86400"
+                        required
+                    >
+
+                    <span>
+                        secondes
+                    </span>
+
+                </div>
+
+                <small>
+                    Exemple : 7200 secondes = 2 heures.
+                </small>
+
+            </div>
+
+
+            <!-- Bumps enabled -->
+
+            <div class="admin-setting-toggle">
+
+                <div>
+
+                    <strong>
+                        🚀 Système de bumps
+                    </strong>
+
+                    <p>
+                        Active ou désactive complètement les bumps.
+                    </p>
+
+                </div>
+
+                <label class="admin-switch">
+
+                    <input
+                        type="checkbox"
+                        name="bumps_enabled"
+                        value="1"
+                        {% if not settings or settings.bumps_enabled %}
+                            checked
+                        {% endif %}
+                    >
+
+                    <span></span>
+
+                </label>
+
+            </div>
+
+
+            <!-- Ranking -->
+
+            <div class="admin-setting-toggle">
+
+                <div>
+
+                    <strong>
+                        🏆 Classement public
+                    </strong>
+
+                    <p>
+                        Affiche les serveurs dans le classement.
+                    </p>
+
+                </div>
+
+                <label class="admin-switch">
+
+                    <input
+                        type="checkbox"
+                        name="ranking_enabled"
+                        value="1"
+                        {% if not settings or settings.ranking_enabled %}
+                            checked
+                        {% endif %}
+                    >
+
+                    <span></span>
+
+                </label>
+
+            </div>
+
+
+            <div class="admin-form-actions">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    💾 Enregistrer
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+    <!-- =========================
+         SECURITY
+    ========================== -->
+
+    <section class="admin-settings-section">
+
+        <div class="admin-section-title">
+
+            <span class="section-badge">
+                🔐 Sécurité
+            </span>
+
+            <h2>
+                Sécurité du panneau
+            </h2>
+
+            <p>
+                Gestion des paramètres de sécurité de
+                l'administration.
+            </p>
+
+        </div>
+
+
+        <div class="admin-security-card">
+
+            <div class="admin-security-row">
+
+                <div>
+
+                    <strong>
+                        👤 Compte administrateur
+                    </strong>
+
+                    <p>
+                        Nom d'utilisateur :
+                        <strong>
+                            {{ config.ADMIN_USERNAME }}
+                        </strong>
+                    </p>
+
+                </div>
+
+                <span class="status-online">
+                    🟢 Configuré
+                </span>
+
+            </div>
+
+
+            <div class="admin-security-row">
+
+                <div>
+
+                    <strong>
+                        🔑 Mot de passe
+                    </strong>
+
+                    <p>
+                        Le mot de passe est stocké dans
+                        la configuration serveur.
+                    </p>
+
+                </div>
+
+                <span class="status-online">
+                    🛡️ Protégé
+                </span>
+
+            </div>
+
+
+            <div class="admin-security-row">
+
+                <div>
+
+                    <strong>
+                        🔒 Session administrateur
+                    </strong>
+
+                    <p>
+                        Les pages admin nécessitent une
+                        authentification.
+                    </p>
+
+                </div>
+
+                <span class="status-online">
+                    🟢 Active
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         WARNING
+    ========================== -->
+
+    <section class="admin-warning-card">
+
+        <div class="admin-warning-icon">
+            ⚠️
+        </div>
+
+        <div>
+
+            <h3>
+                Attention
+            </h3>
+
+            <p>
+                Ne partage jamais tes identifiants
+                administrateur, ton mot de passe ou ton
+                token Discord.
+            </p>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}
