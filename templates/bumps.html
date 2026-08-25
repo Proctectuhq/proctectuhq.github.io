@@ -1,0 +1,580 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Bumps • {{ config.SITE_NAME }}
+{% endblock %}
+
+{% block description %}
+    Découvre les derniers bumps des serveurs Discord sur {{ config.SITE_NAME }}.
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/style.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<div class="bumps-page">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <section class="bumps-header">
+
+        <span class="section-badge">
+            🚀 Bumps
+        </span>
+
+        <h1>
+            Les derniers bumps
+        </h1>
+
+        <p>
+            Découvre les serveurs qui viennent d'être bumpés
+            et trouve rapidement de nouvelles communautés.
+        </p>
+
+    </section>
+
+
+    <!-- =========================
+         LIVE STATUS
+    ========================== -->
+
+    <section class="bumps-live-card">
+
+        <div class="live-indicator">
+            <span class="live-dot"></span>
+
+            <strong>
+                Activité en direct
+            </strong>
+        </div>
+
+        <p>
+            Les nouveaux bumps apparaissent automatiquement
+            sur cette page.
+        </p>
+
+        <span class="live-icon">
+            ⚡
+        </span>
+
+    </section>
+
+
+    <!-- =========================
+         FILTERS
+    ========================== -->
+
+    <section class="bumps-filters">
+
+        <div class="bumps-filter-header">
+
+            <div>
+
+                <h2>
+                    📋 Activité récente
+                </h2>
+
+                <p>
+                    Les derniers serveurs mis en avant.
+                </p>
+
+            </div>
+
+
+            <form
+                action="/bumps"
+                method="GET"
+                class="bumps-filter-form"
+            >
+
+                <select
+                    name="category"
+                    onchange="this.form.submit()"
+                >
+
+                    <option value="">
+                        📂 Toutes les catégories
+                    </option>
+
+                    {% if categories %}
+
+                        {% for category in categories %}
+
+                            <option
+                                value="{{ category }}"
+                                {% if request.args.get('category') == category %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ category }}
+                            </option>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <option value="Gaming">
+                            🎮 Gaming
+                        </option>
+
+                        <option value="Communauté">
+                            👥 Communauté
+                        </option>
+
+                        <option value="Anime">
+                            🍥 Anime
+                        </option>
+
+                        <option value="Musique">
+                            🎵 Musique
+                        </option>
+
+                        <option value="Développement">
+                            💻 Développement
+                        </option>
+
+                        <option value="Roleplay">
+                            🎭 Roleplay
+                        </option>
+
+                    {% endif %}
+
+                </select>
+
+            </form>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         BUMP FEED
+    ========================== -->
+
+    <section class="bumps-feed">
+
+        {% if bumps %}
+
+            {% for bump in bumps %}
+
+                <article
+                    class="bump-card"
+                    data-bump-id="{{ bump.id }}"
+                >
+
+                    <!-- Server -->
+
+                    <div class="bump-server">
+
+                        {% if bump.server_icon %}
+
+                            <img
+                                src="{{ bump.server_icon }}"
+                                alt="{{ bump.server_name }}"
+                                class="bump-server-icon"
+                                loading="lazy"
+                            >
+
+                        {% else %}
+
+                            <div class="bump-server-icon-placeholder">
+                                🖥️
+                            </div>
+
+                        {% endif %}
+
+
+                        <div class="bump-server-info">
+
+                            <div class="bump-server-name">
+
+                                <a
+                                    href="/server/{{ bump.guild_id }}"
+                                >
+                                    {{ bump.server_name }}
+                                </a>
+
+                                {% if bump.verified %}
+
+                                    <span
+                                        class="verified-badge"
+                                        title="Serveur vérifié"
+                                    >
+                                        ✓
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            {% if bump.category %}
+
+                                <span class="bump-category">
+                                    📂 {{ bump.category }}
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Bump information -->
+
+                    <div class="bump-content">
+
+                        <div class="bump-status">
+
+                            <span class="bump-status-icon">
+                                🚀
+                            </span>
+
+                            <div>
+
+                                <strong>
+                                    Serveur bumpé !
+                                </strong>
+
+                                <span>
+                                    {{ bump.created_at or
+                                    "À l'instant" }}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        {% if bump.description %}
+
+                            <p class="bump-description">
+                                {{ bump.description }}
+                            </p>
+
+                        {% endif %}
+
+
+                        {% if bump.tags %}
+
+                            <div class="bump-tags">
+
+                                {% for tag in bump.tags[:4] %}
+
+                                    <span>
+                                        #{{ tag }}
+                                    </span>
+
+                                {% endfor %}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- Stats -->
+
+                    <div class="bump-stats">
+
+                        <div>
+
+                            <span>
+                                👥
+                            </span>
+
+                            <strong>
+                                {{ bump.members or 0 }}
+                            </strong>
+
+                            <small>
+                                membres
+                            </small>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                🚀
+                            </span>
+
+                            <strong>
+                                {{ bump.bump_count or 0 }}
+                            </strong>
+
+                            <small>
+                                bumps
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Action -->
+
+                    <div class="bump-action">
+
+                        <a
+                            href="/server/{{ bump.guild_id }}"
+                            class="btn btn-primary"
+                        >
+                            👁️ Découvrir
+                        </a>
+
+                        {% if bump.invite %}
+
+                            <a
+                                href="{{ bump.invite }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="bump-join-button"
+                            >
+                                🔗 Rejoindre
+                            </a>
+
+                        {% endif %}
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+
+        {% else %}
+
+            <!-- =========================
+                 EMPTY
+            ========================== -->
+
+            <div class="bumps-empty">
+
+                <div class="bumps-empty-icon">
+                    🚀
+                </div>
+
+                <h2>
+                    Aucun bump récent
+                </h2>
+
+                <p>
+                    Aucun serveur n'a été bumpé récemment.
+                    Reviens un peu plus tard !
+                </p>
+
+                <a
+                    href="/servers"
+                    class="btn btn-primary"
+                >
+                    🖥️ Découvrir les serveurs
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- =========================
+         PAGINATION
+    ========================== -->
+
+    {% if pagination %}
+
+        <nav
+            class="pagination"
+            aria-label="Pagination des bumps"
+        >
+
+            {% if pagination.has_prev %}
+
+                <a
+                    href="?page={{ pagination.prev_num }}{% if request.args.get('category') %}&category={{ request.args.get('category') }}{% endif %}"
+                    class="pagination-button"
+                >
+                    ← Précédent
+                </a>
+
+            {% endif %}
+
+
+            {% for page in pagination.iter_pages() %}
+
+                {% if page %}
+
+                    {% if page == pagination.page %}
+
+                        <span class="pagination-button active">
+                            {{ page }}
+                        </span>
+
+                    {% else %}
+
+                        <a
+                            href="?page={{ page }}{% if request.args.get('category') %}&category={{ request.args.get('category') }}{% endif %}"
+                            class="pagination-button"
+                        >
+                            {{ page }}
+                        </a>
+
+                    {% endif %}
+
+                {% else %}
+
+                    <span class="pagination-separator">
+                        …
+                    </span>
+
+                {% endif %}
+
+            {% endfor %}
+
+
+            {% if pagination.has_next %}
+
+                <a
+                    href="?page={{ pagination.next_num }}{% if request.args.get('category') %}&category={{ request.args.get('category') }}{% endif %}"
+                    class="pagination-button"
+                >
+                    Suivant →
+                </a>
+
+            {% endif %}
+
+        </nav>
+
+    {% endif %}
+
+
+    <!-- =========================
+         CTA
+    ========================== -->
+
+    <section class="bumps-cta">
+
+        <div class="bumps-cta-icon">
+            🤖
+        </div>
+
+        <div class="bumps-cta-content">
+
+            <h2>
+                Ton serveur n'est pas encore ici ?
+            </h2>
+
+            <p>
+                Ajoute le bot {{ config.SITE_NAME }} et utilise
+                les bumps pour mettre ton serveur en avant.
+            </p>
+
+        </div>
+
+        <a
+            href="{{ config.DISCORD_BOT_INVITE_URL }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-primary"
+        >
+            ➕ Ajouter le bot
+        </a>
+
+    </section>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script>
+    /*
+     * Rafraîchissement automatique de l'activité.
+     *
+     * La route /api/bumps/latest pourra retourner
+     * les derniers bumps en JSON lorsque nous
+     * créerons l'API.
+     */
+
+    let lastBumpId = null;
+
+    {% if bumps and bumps|length > 0 %}
+        lastBumpId = {{ bumps[0].id | tojson }};
+    {% endif %}
+
+
+    async function checkNewBumps() {
+
+        try {
+
+            const response = await fetch(
+                "/api/bumps/latest",
+                {
+                    method: "GET",
+                    headers: {
+                        "Accept": "application/json"
+                    }
+                }
+            );
+
+
+            if (!response.ok) {
+                return;
+            }
+
+
+            const data = await response.json();
+
+
+            if (
+                data.success &&
+                data.latest_id &&
+                data.latest_id !== lastBumpId
+            ) {
+
+                /*
+                 * Recharge la page pour afficher
+                 * les nouveaux bumps.
+                 */
+
+                window.location.reload();
+
+            }
+
+        } catch (error) {
+
+            console.warn(
+                "Impossible de vérifier les nouveaux bumps.",
+                error
+            );
+
+        }
+
+    }
+
+
+    /*
+     * Vérification toutes les 30 secondes.
+     */
+
+    setInterval(
+        checkNewBumps,
+        30000
+    );
+</script>
+
+{% endblock %}
