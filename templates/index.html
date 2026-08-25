@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="{{ config.SITE_DESCRIPTION }}"
+    >
+
+    <title>{{ config.SITE_NAME }}</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/home.css') }}"
+    >
+</head>
+
+<body>
+
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+
+    <header class="navbar">
+        <div class="navbar-container">
+
+            <a href="/" class="logo">
+                <span class="logo-icon">🚀</span>
+                <span>{{ config.SITE_NAME }}</span>
+            </a>
+
+            <nav class="nav-links">
+
+                <a href="/">
+                    🏠 Accueil
+                </a>
+
+                <a href="/servers">
+                    🖥️ Serveurs
+                </a>
+
+                <a href="/top">
+                    🏆 Top
+                </a>
+
+                <a href="/search">
+                    🔎 Recherche
+                </a>
+
+                {% if session.get("user") %}
+
+                    <a href="/dashboard">
+                        📊 Dashboard
+                    </a>
+
+                    <a href="/profile">
+                        👤 Profil
+                    </a>
+
+                {% else %}
+
+                    <a
+                        href="/auth/login"
+                        class="nav-login"
+                    >
+                        🔐 Connexion
+                    </a>
+
+                {% endif %}
+
+            </nav>
+
+        </div>
+    </header>
+
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <main>
+
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <div class="hero-badge">
+                    🚀 La plateforme de bump Discord
+                </div>
+
+                <h1>
+                    Fais découvrir ton
+                    <span>serveur Discord</span>
+                </h1>
+
+                <p class="hero-description">
+                    Ajoute ton serveur, gagne des bumps et
+                    augmente sa visibilité auprès de nouvelles
+                    communautés Discord.
+                </p>
+
+                <div class="hero-buttons">
+
+                    {% if session.get("user") %}
+
+                        <a
+                            href="/dashboard"
+                            class="btn btn-primary"
+                        >
+                            📊 Ouvrir mon dashboard
+                        </a>
+
+                    {% else %}
+
+                        <a
+                            href="/auth/login"
+                            class="btn btn-primary"
+                        >
+                            🔐 Se connecter avec Discord
+                        </a>
+
+                    {% endif %}
+
+                    <a
+                        href="/servers"
+                        class="btn btn-secondary"
+                    >
+                        🔎 Découvrir les serveurs
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             STATS
+        ========================== -->
+
+        <section class="stats-section">
+
+            <div class="stats-container">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        🖥️
+                    </div>
+
+                    <div class="stat-value">
+                        {{ stats.servers if stats else 0 }}
+                    </div>
+
+                    <div class="stat-label">
+                        Serveurs
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        👥
+                    </div>
+
+                    <div class="stat-value">
+                        {{ stats.users if stats else 0 }}
+                    </div>
+
+                    <div class="stat-label">
+                        Utilisateurs
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        🚀
+                    </div>
+
+                    <div class="stat-value">
+                        {{ stats.bumps if stats else 0 }}
+                    </div>
+
+                    <div class="stat-label">
+                        Bumps
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             FEATURES
+        ========================== -->
+
+        <section class="features-section">
+
+            <div class="section-header">
+
+                <span class="section-badge">
+                    ✨ Fonctionnalités
+                </span>
+
+                <h2>
+                    Tout ce qu'il faut pour
+                    développer ton serveur
+                </h2>
+
+                <p>
+                    Une plateforme simple pour augmenter
+                    la visibilité de ta communauté.
+                </p>
+
+            </div>
+
+
+            <div class="features-grid">
+
+                <article class="feature-card">
+
+                    <div class="feature-icon">
+                        🚀
+                    </div>
+
+                    <h3>
+                        Bump ton serveur
+                    </h3>
+
+                    <p>
+                        Utilise la commande de bump pour
+                        faire remonter ton serveur dans
+                        les classements.
+                    </p>
+
+                </article>
+
+
+                <article class="feature-card">
+
+                    <div class="feature-icon">
+                        📈
+                    </div>
+
+                    <h3>
+                        Suis tes statistiques
+                    </h3>
+
+                    <p>
+                        Consulte les bumps, les visites
+                        et les statistiques de ton serveur
+                        depuis ton dashboard.
+                    </p>
+
+                </article>
+
+
+                <article class="feature-card">
+
+                    <div class="feature-icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Trouve des serveurs
+                    </h3>
+
+                    <p>
+                        Recherche facilement des communautés
+                        Discord selon leurs catégories et
+                        leurs tags.
+                    </p>
+
+                </article>
+
+
+                <article class="feature-card">
+
+                    <div class="feature-icon">
+                        🏆
+                    </div>
+
+                    <h3>
+                        Classements
+                    </h3>
+
+                    <p>
+                        Découvre les serveurs les plus actifs
+                        grâce aux différents classements.
+                    </p>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             TOP SERVERS
+        ========================== -->
+
+        <section class="servers-section">
+
+            <div class="section-header">
+
+                <span class="section-badge">
+                    🏆 Populaires
+                </span>
+
+                <h2>
+                    Serveurs populaires
+                </h2>
+
+                <p>
+                    Les communautés qui attirent le plus
+                    de visiteurs.
+                </p>
+
+            </div>
+
+
+            <div class="servers-grid">
+
+                {% if popular_servers %}
+
+                    {% for server in popular_servers %}
+
+                        <article class="server-card">
+
+                            <div class="server-card-header">
+
+                                {% if server.icon %}
+                                    <img
+                                        src="{{ server.icon }}"
+                                        alt="{{ server.name }}"
+                                        class="server-icon"
+                                    >
+                                {% else %}
+                                    <div class="server-icon-placeholder">
+                                        🖥️
+                                    </div>
+                                {% endif %}
+
+                                <div class="server-info">
+
+                                    <h3>
+                                        {{ server.name }}
+                                    </h3>
+
+                                    <span>
+                                        👥 {{ server.members or 0 }}
+                                        membres
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <p class="server-description">
+                                {{ server.description or
+                                "Aucune description disponible." }}
+                            </p>
+
+
+                            <div class="server-footer">
+
+                                <span class="server-bumps">
+                                    🚀 {{ server.bump_count or 0 }}
+                                    bumps
+                                </span>
+
+                                <a
+                                    href="/server/{{ server.guild_id }}"
+                                    class="server-button"
+                                >
+                                    Voir →
+                                </a>
+
+                            </div>
+
+                        </article>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="empty-state">
+
+                        <div class="empty-icon">
+                            🖥️
+                        </div>
+
+                        <h3>
+                            Aucun serveur pour le moment
+                        </h3>
+
+                        <p>
+                            Les premiers serveurs apparaîtront
+                            ici prochainement.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             CTA
+        ========================== -->
+
+        <section class="cta-section">
+
+            <div class="cta-container">
+
+                <div class="cta-icon">
+                    🚀
+                </div>
+
+                <h2>
+                    Prêt à faire connaître ton serveur ?
+                </h2>
+
+                <p>
+                    Connecte ton compte Discord et ajoute
+                    ton serveur à la plateforme.
+                </p>
+
+                {% if session.get("user") %}
+
+                    <a
+                        href="/dashboard"
+                        class="btn btn-primary"
+                    >
+                        📊 Accéder au dashboard
+                    </a>
+
+                {% else %}
+
+                    <a
+                        href="/auth/login"
+                        class="btn btn-primary"
+                    >
+                        🔐 Commencer maintenant
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer class="footer">
+
+        <div class="footer-container">
+
+            <div class="footer-brand">
+
+                <a href="/" class="logo">
+                    <span class="logo-icon">🚀</span>
+                    <span>{{ config.SITE_NAME }}</span>
+                </a>
+
+                <p>
+                    La plateforme de découverte et
+                    de bump pour les serveurs Discord.
+                </p>
+
+            </div>
+
+
+            <div class="footer-links">
+
+                <div class="footer-column">
+
+                    <h4>
+                        Navigation
+                    </h4>
+
+                    <a href="/">
+                        🏠 Accueil
+                    </a>
+
+                    <a href="/servers">
+                        🖥️ Serveurs
+                    </a>
+
+                    <a href="/top">
+                        🏆 Top
+                    </a>
+
+                    <a href="/search">
+                        🔎 Recherche
+                    </a>
+
+                </div>
+
+
+                <div class="footer-column">
+
+                    <h4>
+                        Compte
+                    </h4>
+
+                    {% if session.get("user") %}
+
+                        <a href="/dashboard">
+                            📊 Dashboard
+                        </a>
+
+                        <a href="/profile">
+                            👤 Profil
+                        </a>
+
+                    {% else %}
+
+                        <a href="/auth/login">
+                            🔐 Connexion
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="footer-column">
+
+                    <h4>
+                        Informations
+                    </h4>
+
+                    <a href="/terms">
+                        📄 Conditions
+                    </a>
+
+                    <a href="/privacy">
+                        🔒 Confidentialité
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <p>
+                © {{ current_year or 2026 }}
+                {{ config.SITE_NAME }}.
+                Tous droits réservés.
+            </p>
+
+            <p>
+                Fait avec ❤️ pour Discord
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <script
+        src="{{ url_for('static', filename='js/home.js') }}"
+    ></script>
+
+</body>
+</html>
