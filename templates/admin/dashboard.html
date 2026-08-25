@@ -1,0 +1,543 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Admin Dashboard • {{ config.SITE_NAME }}
+{% endblock %}
+
+{% block description %}
+    Panneau d'administration de {{ config.SITE_NAME }}.
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/admin.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-page">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <section class="admin-header">
+
+        <div>
+
+            <span class="section-badge">
+                🔐 Administration
+            </span>
+
+            <h1>
+                Dashboard
+            </h1>
+
+            <p>
+                Bienvenue dans le panneau d'administration
+                de {{ config.SITE_NAME }}.
+            </p>
+
+        </div>
+
+
+        <div class="admin-header-actions">
+
+            <a
+                href="{{ url_for('home.index') }}"
+                class="btn btn-secondary"
+            >
+                🌐 Voir le site
+            </a>
+
+            <a
+                href="{{ url_for('admin.logout') }}"
+                class="btn btn-danger"
+            >
+                🚪 Déconnexion
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         STATISTIQUES
+    ========================== -->
+
+    <section class="admin-stats">
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon">
+                👥
+            </div>
+
+            <div>
+
+                <span>
+                    Utilisateurs
+                </span>
+
+                <strong>
+                    {{ stats.users if stats else 0 }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon">
+                🖥️
+            </div>
+
+            <div>
+
+                <span>
+                    Serveurs
+                </span>
+
+                <strong>
+                    {{ stats.servers if stats else 0 }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon">
+                🚀
+            </div>
+
+            <div>
+
+                <span>
+                    Bumps
+                </span>
+
+                <strong>
+                    {{ stats.bumps if stats else 0 }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-stat-card">
+
+            <div class="admin-stat-icon">
+                👁️
+            </div>
+
+            <div>
+
+                <span>
+                    Visites
+                </span>
+
+                <strong>
+                    {{ stats.views if stats else 0 }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         NAVIGATION ADMIN
+    ========================== -->
+
+    <section class="admin-navigation">
+
+        <div class="admin-section-title">
+
+            <span class="section-badge">
+                ⚙️ Gestion
+            </span>
+
+            <h2>
+                Administration
+            </h2>
+
+        </div>
+
+
+        <div class="admin-menu-grid">
+
+            <!-- Paramètres -->
+
+            <a
+                href="{{ url_for('admin.settings') }}"
+                class="admin-menu-card"
+            >
+
+                <div class="admin-menu-icon">
+                    ⚙️
+                </div>
+
+                <div>
+
+                    <h3>
+                        Paramètres
+                    </h3>
+
+                    <p>
+                        Configure le site et ses options.
+                    </p>
+
+                </div>
+
+                <span>
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- Bot -->
+
+            <a
+                href="{{ url_for('admin.bot') }}"
+                class="admin-menu-card"
+            >
+
+                <div class="admin-menu-icon">
+                    🤖
+                </div>
+
+                <div>
+
+                    <h3>
+                        Bot Discord
+                    </h3>
+
+                    <p>
+                        Token, invitation et configuration du bot.
+                    </p>
+
+                </div>
+
+                <span>
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- Utilisateurs -->
+
+            <a
+                href="{{ url_for('admin.users') }}"
+                class="admin-menu-card"
+            >
+
+                <div class="admin-menu-icon">
+                    👥
+                </div>
+
+                <div>
+
+                    <h3>
+                        Utilisateurs
+                    </h3>
+
+                    <p>
+                        Consulte et gère les utilisateurs.
+                    </p>
+
+                </div>
+
+                <span>
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- Serveurs -->
+
+            <a
+                href="{{ url_for('admin.servers') }}"
+                class="admin-menu-card"
+            >
+
+                <div class="admin-menu-icon">
+                    🖥️
+                </div>
+
+                <div>
+
+                    <h3>
+                        Serveurs
+                    </h3>
+
+                    <p>
+                        Gère les serveurs présents sur le site.
+                    </p>
+
+                </div>
+
+                <span>
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- Logs -->
+
+            <a
+                href="{{ url_for('admin.logs') }}"
+                class="admin-menu-card"
+            >
+
+                <div class="admin-menu-icon">
+                    📜
+                </div>
+
+                <div>
+
+                    <h3>
+                        Logs
+                    </h3>
+
+                    <p>
+                        Consulte les activités et événements.
+                    </p>
+
+                </div>
+
+                <span>
+                    →
+                </span>
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         BOT STATUS
+    ========================== -->
+
+    <section class="admin-bot-status">
+
+        <div class="admin-section-title">
+
+            <span class="section-badge">
+                🤖 Bot
+            </span>
+
+            <h2>
+                État du bot Discord
+            </h2>
+
+        </div>
+
+
+        <div class="admin-status-card">
+
+            <div class="admin-status-left">
+
+                <div class="admin-bot-avatar">
+                    🤖
+                </div>
+
+                <div>
+
+                    <h3>
+                        {{ config.SITE_NAME }} Bot
+                    </h3>
+
+                    {% if bot_status %}
+
+                        <span class="status-online">
+                            🟢 En ligne
+                        </span>
+
+                    {% else %}
+
+                        <span class="status-offline">
+                            🔴 Hors ligne
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <a
+                href="{{ url_for('admin.bot') }}"
+                class="btn btn-primary"
+            >
+                ⚙️ Configurer
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         RECENT LOGS
+    ========================== -->
+
+    <section class="admin-recent">
+
+        <div class="admin-section-title">
+
+            <div>
+
+                <span class="section-badge">
+                    📜 Activité
+                </span>
+
+                <h2>
+                    Activité récente
+                </h2>
+
+            </div>
+
+            <a
+                href="{{ url_for('admin.logs') }}"
+                class="btn btn-secondary"
+            >
+                Voir tous les logs
+            </a>
+
+        </div>
+
+
+        {% if logs %}
+
+            <div class="admin-logs">
+
+                {% for log in logs[:10] %}
+
+                    <div class="admin-log-row">
+
+                        <div class="admin-log-icon">
+
+                            {% if log.type == "success" %}
+                                ✅
+                            {% elif log.type == "warning" %}
+                                ⚠️
+                            {% elif log.type == "error" %}
+                                ❌
+                            else %}
+                                ℹ️
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="admin-log-content">
+
+                            <strong>
+                                {{ log.action }}
+                            </strong>
+
+                            <span>
+                                {{ log.message or "" }}
+                            </span>
+
+                        </div>
+
+
+                        <time>
+                            {{ log.created_at or "—" }}
+                        </time>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="admin-empty">
+
+                <div>
+                    📜
+                </div>
+
+                <h3>
+                    Aucun log récent
+                </h3>
+
+                <p>
+                    Les activités administratives apparaîtront ici.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- =========================
+         QUICK ACTIONS
+    ========================== -->
+
+    <section class="admin-quick-actions">
+
+        <h2>
+            ⚡ Actions rapides
+        </h2>
+
+        <div class="admin-actions-grid">
+
+            <a
+                href="{{ url_for('admin.bot') }}"
+                class="btn btn-primary"
+            >
+                🤖 Configurer le bot
+            </a>
+
+            <a
+                href="{{ url_for('admin.settings') }}"
+                class="btn btn-secondary"
+            >
+                ⚙️ Paramètres
+            </a>
+
+            <a
+                href="{{ url_for('admin.servers') }}"
+                class="btn btn-secondary"
+            >
+                🖥️ Gérer les serveurs
+            </a>
+
+            <a
+                href="{{ url_for('admin.users') }}"
+                class="btn btn-secondary"
+            >
+                👥 Gérer les utilisateurs
+            </a>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}
