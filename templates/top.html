@@ -1,0 +1,468 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Classement • {{ config.SITE_NAME }}
+{% endblock %}
+
+{% block description %}
+    Découvre les meilleurs serveurs Discord sur {{ config.SITE_NAME }}.
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/style.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<div class="top-page">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <section class="top-header">
+
+        <span class="section-badge">
+            🏆 Classement
+        </span>
+
+        <h1>
+            Les meilleurs serveurs Discord
+        </h1>
+
+        <p>
+            Découvre les communautés les plus populaires
+            et les plus actives de {{ config.SITE_NAME }}.
+        </p>
+
+    </section>
+
+
+    <!-- =========================
+         TOP NAVIGATION
+    ========================== -->
+
+    <section class="top-tabs">
+
+        <a
+            href="/top?sort=bumps"
+            class="top-tab {% if request.args.get('sort', 'bumps') == 'bumps' %}active{% endif %}"
+        >
+            🚀 Plus de bumps
+        </a>
+
+        <a
+            href="/top?sort=members"
+            class="top-tab {% if request.args.get('sort') == 'members' %}active{% endif %}"
+        >
+            👥 Plus de membres
+        </a>
+
+        <a
+            href="/top?sort=views"
+            class="top-tab {% if request.args.get('sort') == 'views' %}active{% endif %}"
+        >
+            👁️ Plus populaires
+        </a>
+
+        <a
+            href="/top?sort=newest"
+            class="top-tab {% if request.args.get('sort') == 'newest' %}active{% endif %}"
+        >
+            🆕 Nouveaux
+        </a>
+
+    </section>
+
+
+    <!-- =========================
+         PODIUM
+    ========================== -->
+
+    {% if top_servers and top_servers|length >= 3 %}
+
+    <section class="podium-section">
+
+        <div class="podium">
+
+            <!-- 2e place -->
+
+            <div class="podium-item podium-second">
+
+                <div class="podium-rank">
+                    🥈
+                </div>
+
+                {% if top_servers[1].icon %}
+
+                    <img
+                        src="{{ top_servers[1].icon }}"
+                        alt="{{ top_servers[1].name }}"
+                        class="podium-icon"
+                    >
+
+                {% else %}
+
+                    <div class="podium-icon-placeholder">
+                        🖥️
+                    </div>
+
+                {% endif %}
+
+                <h3>
+                    {{ top_servers[1].name }}
+                </h3>
+
+                <span class="podium-bumps">
+                    🚀 {{ top_servers[1].bump_count or 0 }} bumps
+                </span>
+
+                <a
+                    href="/server/{{ top_servers[1].guild_id }}"
+                    class="podium-button"
+                >
+                    Voir
+                </a>
+
+            </div>
+
+
+            <!-- 1re place -->
+
+            <div class="podium-item podium-first">
+
+                <div class="podium-crown">
+                    👑
+                </div>
+
+                <div class="podium-rank">
+                    🥇
+                </div>
+
+                {% if top_servers[0].icon %}
+
+                    <img
+                        src="{{ top_servers[0].icon }}"
+                        alt="{{ top_servers[0].name }}"
+                        class="podium-icon podium-icon-first"
+                    >
+
+                {% else %}
+
+                    <div class="podium-icon-placeholder podium-icon-first">
+                        🖥️
+                    </div>
+
+                {% endif %}
+
+                <h3>
+                    {{ top_servers[0].name }}
+                </h3>
+
+                <span class="podium-bumps">
+                    🚀 {{ top_servers[0].bump_count or 0 }} bumps
+                </span>
+
+                <a
+                    href="/server/{{ top_servers[0].guild_id }}"
+                    class="podium-button"
+                >
+                    Voir le serveur
+                </a>
+
+            </div>
+
+
+            <!-- 3e place -->
+
+            <div class="podium-item podium-third">
+
+                <div class="podium-rank">
+                    🥉
+                </div>
+
+                {% if top_servers[2].icon %}
+
+                    <img
+                        src="{{ top_servers[2].icon }}"
+                        alt="{{ top_servers[2].name }}"
+                        class="podium-icon"
+                    >
+
+                {% else %}
+
+                    <div class="podium-icon-placeholder">
+                        🖥️
+                    </div>
+
+                {% endif %}
+
+                <h3>
+                    {{ top_servers[2].name }}
+                </h3>
+
+                <span class="podium-bumps">
+                    🚀 {{ top_servers[2].bump_count or 0 }} bumps
+                </span>
+
+                <a
+                    href="/server/{{ top_servers[2].guild_id }}"
+                    class="podium-button"
+                >
+                    Voir
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- =========================
+         CLASSEMENT COMPLET
+    ========================== -->
+
+    <section class="ranking-section">
+
+        <div class="ranking-header">
+
+            <div>
+
+                <span class="section-badge">
+                    📊 Classement
+                </span>
+
+                <h2>
+                    Top serveurs
+                </h2>
+
+                <p>
+                    Les serveurs les mieux classés actuellement.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        {% if top_servers %}
+
+        <div class="ranking-list">
+
+            {% for server in top_servers %}
+
+            <article class="ranking-card">
+
+                <!-- Position -->
+
+                <div class="ranking-position">
+
+                    {% if loop.index == 1 %}
+                        🥇
+                    {% elif loop.index == 2 %}
+                        🥈
+                    {% elif loop.index == 3 %}
+                        🥉
+                    {% else %}
+                        #{{ loop.index }}
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Icon -->
+
+                {% if server.icon %}
+
+                    <img
+                        src="{{ server.icon }}"
+                        alt="{{ server.name }}"
+                        class="ranking-icon"
+                        loading="lazy"
+                    >
+
+                {% else %}
+
+                    <div class="ranking-icon-placeholder">
+                        🖥️
+                    </div>
+
+                {% endif %}
+
+
+                <!-- Informations -->
+
+                <div class="ranking-info">
+
+                    <div class="ranking-title">
+
+                        <h3>
+                            {{ server.name }}
+                        </h3>
+
+                        {% if server.verified %}
+
+                            <span
+                                class="verified-badge"
+                                title="Serveur vérifié"
+                            >
+                                ✓
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                    <p>
+                        {{ server.description or
+                        "Aucune description disponible." }}
+                    </p>
+
+                    {% if server.category %}
+
+                        <span class="ranking-category">
+                            📂 {{ server.category }}
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Stats -->
+
+                <div class="ranking-stats">
+
+                    <div class="ranking-stat">
+
+                        <strong>
+                            {{ server.bump_count or 0 }}
+                        </strong>
+
+                        <span>
+                            🚀 Bumps
+                        </span>
+
+                    </div>
+
+
+                    <div class="ranking-stat">
+
+                        <strong>
+                            {{ server.members or 0 }}
+                        </strong>
+
+                        <span>
+                            👥 Membres
+                        </span>
+
+                    </div>
+
+
+                    <div class="ranking-stat">
+
+                        <strong>
+                            {{ server.views or 0 }}
+                        </strong>
+
+                        <span>
+                            👁️ Visites
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Action -->
+
+                <a
+                    href="/server/{{ server.guild_id }}"
+                    class="ranking-button"
+                >
+                    Voir →
+                </a>
+
+            </article>
+
+            {% endfor %}
+
+        </div>
+
+
+        {% else %}
+
+        <div class="top-empty">
+
+            <div class="top-empty-icon">
+                🏆
+            </div>
+
+            <h2>
+                Aucun serveur classé
+            </h2>
+
+            <p>
+                Le classement apparaîtra lorsque des serveurs
+                seront disponibles.
+            </p>
+
+            <a
+                href="/servers"
+                class="btn btn-primary"
+            >
+                🖥️ Découvrir les serveurs
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- =========================
+         CTA
+    ========================== -->
+
+    <section class="top-cta">
+
+        <div class="top-cta-content">
+
+            <div class="top-cta-icon">
+                🚀
+            </div>
+
+            <div>
+
+                <h2>
+                    Fais monter ton serveur dans le classement
+                </h2>
+
+                <p>
+                    Utilise les bumps pour augmenter ta visibilité
+                    et attirer de nouveaux membres.
+                </p>
+
+            </div>
+
+            <a
+                href="/add-bot"
+                class="btn btn-primary"
+            >
+                ➕ Ajouter mon serveur
+            </a>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}
