@@ -1,0 +1,547 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Dashboard • {{ config.SITE_NAME }}
+{% endblock %}
+
+{% block description %}
+    Gère tes serveurs Discord et consulte tes statistiques.
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/dashboard.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-page">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <section class="dashboard-header">
+
+        <div class="dashboard-welcome">
+
+            {% if session.get("user") and session["user"].get("avatar") %}
+
+                <img
+                    src="https://cdn.discordapp.com/avatars/{{ session['user']['id'] }}/{{ session['user']['avatar'] }}.png?size=128"
+                    alt="Avatar"
+                    class="dashboard-avatar"
+                >
+
+            {% else %}
+
+                <div class="dashboard-avatar-placeholder">
+                    👤
+                </div>
+
+            {% endif %}
+
+            <div>
+
+                <span class="dashboard-label">
+                    📊 Tableau de bord
+                </span>
+
+                <h1>
+                    Bonjour
+                    {% if session.get("user") %}
+                        {{ session["user"].get("global_name") or session["user"].get("username") or "utilisateur" }}
+                    {% else %}
+                        👋
+                    {% endif %}
+                </h1>
+
+                <p>
+                    Gère tes serveurs et suis leurs statistiques.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-actions">
+
+            <a
+                href="/add-bot"
+                class="btn btn-primary"
+            >
+                ➕ Ajouter un serveur
+            </a>
+
+            <a
+                href="/profile"
+                class="btn btn-secondary"
+            >
+                👤 Mon profil
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         STATISTIQUES
+    ========================== -->
+
+    <section class="dashboard-stats">
+
+        <div class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon">
+                🖥️
+            </div>
+
+            <div class="dashboard-stat-content">
+
+                <span>
+                    Mes serveurs
+                </span>
+
+                <strong>
+                    {{ stats.servers if stats else 0 }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon">
+                🚀
+            </div>
+
+            <div class="dashboard-stat-content">
+
+                <span>
+                    Total de bumps
+                </span>
+
+                <strong>
+                    {{ stats.bumps if stats else 0 }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon">
+                👥
+            </div>
+
+            <div class="dashboard-stat-content">
+
+                <span>
+                    Membres
+                </span>
+
+                <strong>
+                    {{ stats.members if stats else 0 }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon">
+                📈
+            </div>
+
+            <div class="dashboard-stat-content">
+
+                <span>
+                    Visites
+                </span>
+
+                <strong>
+                    {{ stats.views if stats else 0 }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         SERVEURS
+    ========================== -->
+
+    <section class="dashboard-section">
+
+        <div class="dashboard-section-header">
+
+            <div>
+
+                <span class="section-badge">
+                    🖥️ Gestion
+                </span>
+
+                <h2>
+                    Mes serveurs
+                </h2>
+
+                <p>
+                    Gère les serveurs Discord associés à ton compte.
+                </p>
+
+            </div>
+
+            <a
+                href="/servers"
+                class="dashboard-view-all"
+            >
+                Voir tous →
+            </a>
+
+        </div>
+
+
+        <div class="dashboard-servers-grid">
+
+            {% if servers %}
+
+                {% for server in servers %}
+
+                    <article class="dashboard-server-card">
+
+                        <div class="dashboard-server-top">
+
+                            {% if server.icon %}
+
+                                <img
+                                    src="{{ server.icon }}"
+                                    alt="{{ server.name }}"
+                                    class="dashboard-server-icon"
+                                >
+
+                            {% else %}
+
+                                <div class="dashboard-server-icon-placeholder">
+                                    🖥️
+                                </div>
+
+                            {% endif %}
+
+
+                            <div class="dashboard-server-info">
+
+                                <h3>
+                                    {{ server.name }}
+                                </h3>
+
+                                <span>
+                                    ID :
+                                    {{ server.guild_id }}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="dashboard-server-stats">
+
+                            <div>
+                                <span>
+                                    🚀 Bumps
+                                </span>
+
+                                <strong>
+                                    {{ server.bump_count or 0 }}
+                                </strong>
+                            </div>
+
+
+                            <div>
+                                <span>
+                                    👥 Membres
+                                </span>
+
+                                <strong>
+                                    {{ server.members or 0 }}
+                                </strong>
+                            </div>
+
+
+                            <div>
+                                <span>
+                                    👁️ Visites
+                                </span>
+
+                                <strong>
+                                    {{ server.views or 0 }}
+                                </strong>
+                            </div>
+
+                        </div>
+
+
+                        <div class="dashboard-server-actions">
+
+                            <a
+                                href="/server/{{ server.guild_id }}"
+                                class="server-action-button"
+                            >
+                                👁️ Voir
+                            </a>
+
+                            <a
+                                href="/dashboard/server/{{ server.guild_id }}"
+                                class="server-action-button"
+                            >
+                                ⚙️ Gérer
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="dashboard-empty">
+
+                    <div class="dashboard-empty-icon">
+                        🖥️
+                    </div>
+
+                    <h3>
+                        Aucun serveur
+                    </h3>
+
+                    <p>
+                        Tu n'as pas encore ajouté de serveur
+                        à {{ config.SITE_NAME }}.
+                    </p>
+
+                    <a
+                        href="/add-bot"
+                        class="btn btn-primary"
+                    >
+                        ➕ Ajouter mon premier serveur
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         DERNIERS BUMPS
+    ========================== -->
+
+    <section class="dashboard-section">
+
+        <div class="dashboard-section-header">
+
+            <div>
+
+                <span class="section-badge">
+                    🚀 Activité
+                </span>
+
+                <h2>
+                    Derniers bumps
+                </h2>
+
+                <p>
+                    Les derniers bumps effectués sur tes serveurs.
+                </p>
+
+            </div>
+
+            <a
+                href="/bumps"
+                class="dashboard-view-all"
+            >
+                Historique →
+            </a>
+
+        </div>
+
+
+        <div class="bumps-table-container">
+
+            {% if recent_bumps %}
+
+                <table class="bumps-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Serveur
+                            </th>
+
+                            <th>
+                                Utilisateur
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Statut
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for bump in recent_bumps %}
+
+                            <tr>
+
+                                <td>
+
+                                    <div class="bump-server">
+
+                                        {% if bump.server_icon %}
+
+                                            <img
+                                                src="{{ bump.server_icon }}"
+                                                alt="{{ bump.server_name }}"
+                                            >
+
+                                        {% else %}
+
+                                            <div class="bump-server-placeholder">
+                                                🖥️
+                                            </div>
+
+                                        {% endif %}
+
+                                        <span>
+                                            {{ bump.server_name }}
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+                                    {{ bump.username or "Utilisateur" }}
+                                </td>
+
+
+                                <td>
+                                    {{ bump.created_at or "Récemment" }}
+                                </td>
+
+
+                                <td>
+
+                                    <span class="status-badge status-success">
+                                        ✅ Effectué
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            {% else %}
+
+                <div class="dashboard-empty small">
+
+                    <div class="dashboard-empty-icon">
+                        🚀
+                    </div>
+
+                    <h3>
+                        Aucun bump
+                    </h3>
+
+                    <p>
+                        Les bumps de tes serveurs apparaîtront ici.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         LIEN BOT
+    ========================== -->
+
+    <section class="dashboard-bot-card">
+
+        <div class="dashboard-bot-icon">
+            🤖
+        </div>
+
+        <div class="dashboard-bot-content">
+
+            <h2>
+                Ton serveur n'est pas encore configuré ?
+            </h2>
+
+            <p>
+                Ajoute le bot {{ config.SITE_NAME }} à ton serveur
+                Discord pour commencer à utiliser les bumps.
+            </p>
+
+        </div>
+
+        <a
+            href="{{ config.DISCORD_BOT_INVITE_URL }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-primary"
+        >
+            ➕ Ajouter le bot
+        </a>
+
+    </section>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script
+    src="{{ url_for('static', filename='js/dashboard.js') }}"
+></script>
+
+{% endblock %}
