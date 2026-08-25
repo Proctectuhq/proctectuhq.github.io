@@ -1,0 +1,650 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Recherche • {{ config.SITE_NAME }}
+{% endblock %}
+
+{% block description %}
+    Recherche un serveur Discord sur {{ config.SITE_NAME }}.
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/style.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<div class="search-page">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <section class="search-header">
+
+        <span class="section-badge">
+            🔎 Recherche
+        </span>
+
+        <h1>
+            Trouve ton prochain serveur
+        </h1>
+
+        <p>
+            Recherche une communauté Discord par nom,
+            description, catégorie ou tag.
+        </p>
+
+    </section>
+
+
+    <!-- =========================
+         SEARCH FORM
+    ========================== -->
+
+    <section class="search-box">
+
+        <form
+            action="/search"
+            method="GET"
+            class="search-form"
+        >
+
+            <div class="search-input-container">
+
+                <span class="search-input-icon">
+                    🔎
+                </span>
+
+                <input
+                    type="text"
+                    name="q"
+                    value="{{ request.args.get('q', '') }}"
+                    placeholder="Nom du serveur, catégorie, tag..."
+                    autocomplete="off"
+                    autofocus
+                >
+
+            </div>
+
+
+            <select
+                name="category"
+                class="search-select"
+            >
+
+                <option value="">
+                    📂 Toutes les catégories
+                </option>
+
+                {% if categories %}
+
+                    {% for category in categories %}
+
+                        <option
+                            value="{{ category }}"
+                            {% if request.args.get('category') == category %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ category }}
+                        </option>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <option value="Gaming">
+                        🎮 Gaming
+                    </option>
+
+                    <option value="Communauté">
+                        👥 Communauté
+                    </option>
+
+                    <option value="Anime">
+                        🍥 Anime
+                    </option>
+
+                    <option value="Musique">
+                        🎵 Musique
+                    </option>
+
+                    <option value="Développement">
+                        💻 Développement
+                    </option>
+
+                    <option value="Roleplay">
+                        🎭 Roleplay
+                    </option>
+
+                    <option value="Éducation">
+                        📚 Éducation
+                    </option>
+
+                {% endif %}
+
+            </select>
+
+
+            <select
+                name="sort"
+                class="search-select"
+            >
+
+                <option
+                    value="bumps"
+                    {% if request.args.get('sort', 'bumps') == 'bumps' %}
+                        selected
+                    {% endif %}
+                >
+                    🚀 Plus de bumps
+                </option>
+
+                <option
+                    value="members"
+                    {% if request.args.get('sort') == 'members' %}
+                        selected
+                    {% endif %}
+                >
+                    👥 Plus de membres
+                </option>
+
+                <option
+                    value="views"
+                    {% if request.args.get('sort') == 'views' %}
+                        selected
+                    {% endif %}
+                >
+                    👁️ Plus vus
+                </option>
+
+                <option
+                    value="newest"
+                    {% if request.args.get('sort') == 'newest' %}
+                        selected
+                    {% endif %}
+                >
+                    🆕 Plus récents
+                </option>
+
+            </select>
+
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+            >
+                🔎 Rechercher
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- =========================
+         QUICK CATEGORIES
+    ========================== -->
+
+    <section class="search-categories">
+
+        <div class="search-categories-header">
+
+            <h2>
+                📂 Catégories populaires
+            </h2>
+
+        </div>
+
+
+        <div class="category-list">
+
+            <a
+                href="/search?category=Gaming"
+                class="category-card"
+            >
+                <span>
+                    🎮
+                </span>
+
+                <strong>
+                    Gaming
+                </strong>
+            </a>
+
+
+            <a
+                href="/search?category=Communauté"
+                class="category-card"
+            >
+                <span>
+                    👥
+                </span>
+
+                <strong>
+                    Communauté
+                </strong>
+            </a>
+
+
+            <a
+                href="/search?category=Anime"
+                class="category-card"
+            >
+                <span>
+                    🍥
+                </span>
+
+                <strong>
+                    Anime
+                </strong>
+            </a>
+
+
+            <a
+                href="/search?category=Musique"
+                class="category-card"
+            >
+                <span>
+                    🎵
+                </span>
+
+                <strong>
+                    Musique
+                </strong>
+            </a>
+
+
+            <a
+                href="/search?category=Développement"
+                class="category-card"
+            >
+                <span>
+                    💻
+                </span>
+
+                <strong>
+                    Développement
+                </strong>
+            </a>
+
+
+            <a
+                href="/search?category=Roleplay"
+                class="category-card"
+            >
+                <span>
+                    🎭
+                </span>
+
+                <strong>
+                    Roleplay
+                </strong>
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         RESULTS
+    ========================== -->
+
+    <section class="search-results">
+
+        <div class="search-results-header">
+
+            <div>
+
+                <span class="section-badge">
+                    🖥️ Résultats
+                </span>
+
+                <h2>
+                    {% if request.args.get('q') %}
+                        Résultats pour
+                        « {{ request.args.get('q') }} »
+                    {% elif request.args.get('category') %}
+                        Serveurs
+                        « {{ request.args.get('category') }} »
+                    {% else %}
+                        Tous les serveurs
+                    {% endif %}
+                </h2>
+
+                <p>
+                    {{ servers|length if servers else 0 }}
+                    serveur(s) trouvé(s)
+                </p>
+
+            </div>
+
+        </div>
+
+
+        {% if servers %}
+
+            <div class="servers-grid">
+
+                {% for server in servers %}
+
+                    <article class="server-card">
+
+                        <!-- Header -->
+
+                        <div class="server-card-header">
+
+                            {% if server.icon %}
+
+                                <img
+                                    src="{{ server.icon }}"
+                                    alt="{{ server.name }}"
+                                    class="server-icon"
+                                    loading="lazy"
+                                >
+
+                            {% else %}
+
+                                <div class="server-icon-placeholder">
+                                    🖥️
+                                </div>
+
+                            {% endif %}
+
+
+                            <div class="server-info">
+
+                                <h3>
+                                    {{ server.name }}
+                                </h3>
+
+                                {% if server.verified %}
+
+                                    <span class="verified-badge">
+                                        ✓
+                                    </span>
+
+                                {% endif %}
+
+                                <span class="server-id">
+                                    👥 {{ server.members or 0 }}
+                                    membres
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Description -->
+
+                        <div class="server-card-body">
+
+                            <p class="server-description">
+
+                                {{ server.description or
+                                "Aucune description disponible." }}
+
+                            </p>
+
+
+                            {% if server.category or server.tags %}
+
+                                <div class="server-tags">
+
+                                    {% if server.category %}
+
+                                        <span class="server-tag">
+                                            📂 {{ server.category }}
+                                        </span>
+
+                                    {% endif %}
+
+
+                                    {% if server.tags %}
+
+                                        {% for tag in server.tags[:3] %}
+
+                                            <span class="server-tag">
+                                                #{{ tag }}
+                                            </span>
+
+                                        {% endfor %}
+
+                                    {% endif %}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Stats -->
+
+                        <div class="server-card-stats">
+
+                            <div class="server-stat">
+
+                                <span class="server-stat-icon">
+                                    🚀
+                                </span>
+
+                                <div>
+
+                                    <strong>
+                                        {{ server.bump_count or 0 }}
+                                    </strong>
+
+                                    <small>
+                                        Bumps
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="server-stat">
+
+                                <span class="server-stat-icon">
+                                    👥
+                                </span>
+
+                                <div>
+
+                                    <strong>
+                                        {{ server.members or 0 }}
+                                    </strong>
+
+                                    <small>
+                                        Membres
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="server-stat">
+
+                                <span class="server-stat-icon">
+                                    👁️
+                                </span>
+
+                                <div>
+
+                                    <strong>
+                                        {{ server.views or 0 }}
+                                    </strong>
+
+                                    <small>
+                                        Visites
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Actions -->
+
+                        <div class="server-card-footer">
+
+                            <a
+                                href="/server/{{ server.guild_id }}"
+                                class="server-view-button"
+                            >
+                                👁️ Voir
+                            </a>
+
+
+                            {% if server.invite %}
+
+                                <a
+                                    href="{{ server.invite }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="server-join-button"
+                                >
+                                    🔗 Rejoindre
+                                </a>
+
+                            {% endif %}
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+
+        {% else %}
+
+            <!-- =========================
+                 NO RESULTS
+            ========================== -->
+
+            <div class="search-empty">
+
+                <div class="search-empty-icon">
+                    🔎
+                </div>
+
+                <h2>
+                    Aucun serveur trouvé
+                </h2>
+
+                <p>
+                    Nous n'avons trouvé aucun serveur correspondant
+                    à ta recherche.
+                </p>
+
+
+                <div class="search-empty-actions">
+
+                    <a
+                        href="/search"
+                        class="btn btn-secondary"
+                    >
+                        🔄 Réinitialiser
+                    </a>
+
+                    <a
+                        href="/servers"
+                        class="btn btn-primary"
+                    >
+                        🖥️ Voir tous les serveurs
+                    </a>
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- =========================
+         PAGINATION
+    ========================== -->
+
+    {% if pagination %}
+
+        <nav
+            class="pagination"
+            aria-label="Pagination"
+        >
+
+            {% if pagination.has_prev %}
+
+                <a
+                    href="?q={{ request.args.get('q', '') }}&category={{ request.args.get('category', '') }}&sort={{ request.args.get('sort', 'bumps') }}&page={{ pagination.prev_num }}"
+                    class="pagination-button"
+                >
+                    ← Précédent
+                </a>
+
+            {% endif %}
+
+
+            {% for page in pagination.iter_pages() %}
+
+                {% if page %}
+
+                    {% if page == pagination.page %}
+
+                        <span class="pagination-button active">
+                            {{ page }}
+                        </span>
+
+                    {% else %}
+
+                        <a
+                            href="?q={{ request.args.get('q', '') }}&category={{ request.args.get('category', '') }}&sort={{ request.args.get('sort', 'bumps') }}&page={{ page }}"
+                            class="pagination-button"
+                        >
+                            {{ page }}
+                        </a>
+
+                    {% endif %}
+
+                {% else %}
+
+                    <span class="pagination-separator">
+                        …
+                    </span>
+
+                {% endif %}
+
+            {% endfor %}
+
+
+            {% if pagination.has_next %}
+
+                <a
+                    href="?q={{ request.args.get('q', '') }}&category={{ request.args.get('category', '') }}&sort={{ request.args.get('sort', 'bumps') }}&page={{ pagination.next_num }}"
+                    class="pagination-button"
+                >
+                    Suivant →
+                </a>
+
+            {% endif %}
+
+        </nav>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
