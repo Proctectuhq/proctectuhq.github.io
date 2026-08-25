@@ -1,0 +1,498 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Mon profil • {{ config.SITE_NAME }}
+{% endblock %}
+
+{% block description %}
+    Gère ton profil {{ config.SITE_NAME }}.
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/style.css') }}"
+>
+{% endblock %}
+
+{% block content %}
+
+<div class="profile-page">
+
+    <!-- =========================
+         PROFILE HEADER
+    ========================== -->
+
+    <section class="profile-header">
+
+        <div class="profile-user">
+
+            {% if user and user.avatar %}
+
+                <img
+                    src="https://cdn.discordapp.com/avatars/{{ user.id }}/{{ user.avatar }}.png?size=256"
+                    alt="Avatar de {{ user.username }}"
+                    class="profile-avatar"
+                >
+
+            {% else %}
+
+                <div class="profile-avatar-placeholder">
+                    👤
+                </div>
+
+            {% endif %}
+
+
+            <div class="profile-user-info">
+
+                <div class="profile-name-row">
+
+                    <h1>
+                        {{ user.global_name or user.username or "Utilisateur" }}
+                    </h1>
+
+                    {% if user.bot %}
+
+                        <span class="profile-badge">
+                            🤖 BOT
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <p class="profile-username">
+                    @{{ user.username or "utilisateur" }}
+                </p>
+
+
+                {% if user.id %}
+
+                    <span class="profile-discord-id">
+                        🆔 {{ user.id }}
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-actions">
+
+            <a
+                href="/dashboard"
+                class="btn btn-primary"
+            >
+                📊 Dashboard
+            </a>
+
+            <a
+                href="/auth/logout"
+                class="btn btn-secondary"
+            >
+                🚪 Déconnexion
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         STATISTIQUES
+    ========================== -->
+
+    <section class="profile-stats">
+
+        <div class="profile-stat-card">
+
+            <span class="profile-stat-icon">
+                🖥️
+            </span>
+
+            <div>
+
+                <strong>
+                    {{ stats.servers if stats else 0 }}
+                </strong>
+
+                <span>
+                    Serveurs
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-stat-card">
+
+            <span class="profile-stat-icon">
+                🚀
+            </span>
+
+            <div>
+
+                <strong>
+                    {{ stats.bumps if stats else 0 }}
+                </strong>
+
+                <span>
+                    Bumps
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-stat-card">
+
+            <span class="profile-stat-icon">
+                👁️
+            </span>
+
+            <div>
+
+                <strong>
+                    {{ stats.views if stats else 0 }}
+                </strong>
+
+                <span>
+                    Visites
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-stat-card">
+
+            <span class="profile-stat-icon">
+                📅
+            </span>
+
+            <div>
+
+                <strong>
+                    {{ user.created_at or "—" }}
+                </strong>
+
+                <span>
+                    Membre depuis
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         SERVEURS
+    ========================== -->
+
+    <section class="profile-section">
+
+        <div class="profile-section-header">
+
+            <div>
+
+                <span class="section-badge">
+                    🖥️ Mes serveurs
+                </span>
+
+                <h2>
+                    Serveurs associés
+                </h2>
+
+                <p>
+                    Les serveurs Discord que tu gères sur
+                    {{ config.SITE_NAME }}.
+                </p>
+
+            </div>
+
+
+            <a
+                href="/add-bot"
+                class="btn btn-primary"
+            >
+                ➕ Ajouter un serveur
+            </a>
+
+        </div>
+
+
+        {% if servers %}
+
+            <div class="profile-servers-grid">
+
+                {% for server in servers %}
+
+                    <article class="profile-server-card">
+
+                        <div class="profile-server-header">
+
+                            {% if server.icon %}
+
+                                <img
+                                    src="{{ server.icon }}"
+                                    alt="{{ server.name }}"
+                                    class="profile-server-icon"
+                                    loading="lazy"
+                                >
+
+                            {% else %}
+
+                                <div class="profile-server-icon-placeholder">
+                                    🖥️
+                                </div>
+
+                            {% endif %}
+
+
+                            <div>
+
+                                <h3>
+                                    {{ server.name }}
+                                </h3>
+
+                                {% if server.verified %}
+
+                                    <span class="verified-badge">
+                                        ✓ Vérifié
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        <p class="profile-server-description">
+
+                            {{ server.description or
+                            "Aucune description disponible." }}
+
+                        </p>
+
+
+                        <div class="profile-server-stats">
+
+                            <span>
+                                🚀 {{ server.bump_count or 0 }}
+                            </span>
+
+                            <span>
+                                👥 {{ server.members or 0 }}
+                            </span>
+
+                            <span>
+                                👁️ {{ server.views or 0 }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="profile-server-actions">
+
+                            <a
+                                href="/server/{{ server.guild_id }}"
+                                class="profile-server-button"
+                            >
+                                👁️ Voir
+                            </a>
+
+                            <a
+                                href="/dashboard/server/{{ server.guild_id }}"
+                                class="profile-server-button"
+                            >
+                                ⚙️ Gérer
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="profile-empty">
+
+                <div class="profile-empty-icon">
+                    🖥️
+                </div>
+
+                <h3>
+                    Aucun serveur
+                </h3>
+
+                <p>
+                    Tu n'as pas encore associé de serveur
+                    à ton compte.
+                </p>
+
+                <a
+                    href="/add-bot"
+                    class="btn btn-primary"
+                >
+                    ➕ Ajouter mon serveur
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- =========================
+         COMPTE DISCORD
+    ========================== -->
+
+    <section class="profile-section">
+
+        <div class="profile-section-header">
+
+            <div>
+
+                <span class="section-badge">
+                    🔐 Compte
+                </span>
+
+                <h2>
+                    Informations du compte
+                </h2>
+
+                <p>
+                    Informations récupérées depuis Discord.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-info-card">
+
+            <div class="profile-info-row">
+
+                <div class="profile-info-label">
+                    👤 Nom d'utilisateur
+                </div>
+
+                <div class="profile-info-value">
+                    {{ user.username or "—" }}
+                </div>
+
+            </div>
+
+
+            <div class="profile-info-row">
+
+                <div class="profile-info-label">
+                    🏷️ Nom affiché
+                </div>
+
+                <div class="profile-info-value">
+                    {{ user.global_name or user.username or "—" }}
+                </div>
+
+            </div>
+
+
+            <div class="profile-info-row">
+
+                <div class="profile-info-label">
+                    🆔 Identifiant Discord
+                </div>
+
+                <div class="profile-info-value">
+                    {{ user.id or "—" }}
+                </div>
+
+            </div>
+
+
+            <div class="profile-info-row">
+
+                <div class="profile-info-label">
+                    📅 Compte créé
+                </div>
+
+                <div class="profile-info-value">
+                    {{ user.created_at or "—" }}
+                </div>
+
+            </div>
+
+
+            <div class="profile-info-row">
+
+                <div class="profile-info-label">
+                    🔗 Connexion
+                </div>
+
+                <div class="profile-info-value">
+
+                    <span class="connection-status">
+                        🟢 Discord connecté
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         BOT
+    ========================== -->
+
+    <section class="profile-bot-card">
+
+        <div class="profile-bot-icon">
+            🤖
+        </div>
+
+        <div class="profile-bot-content">
+
+            <h2>
+                {{ config.SITE_NAME }} Bot
+            </h2>
+
+            <p>
+                Ajoute le bot à ton serveur pour profiter
+                du système de bump.
+            </p>
+
+        </div>
+
+        <a
+            href="{{ config.DISCORD_BOT_INVITE_URL }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-primary"
+        >
+            ➕ Ajouter le bot
+        </a>
+
+    </section>
+
+</div>
+
+{% endblock %}
